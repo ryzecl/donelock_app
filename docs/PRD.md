@@ -41,7 +41,7 @@ Onboarding
 ↓
 Register/Login
 ↓
-Home
+Home (Bottom Navigation)
 
 ## Returning User
 
@@ -49,7 +49,23 @@ Splash
 ↓
 Auth Check
 ↓
-Home
+Home (Bottom Navigation)
+
+## Bottom Navigation
+
+Setelah login, user mengakses 5 tab utama dari bottom navigation:
+1. **Home** — Dashboard, heatmap, greeting
+2. **Journal** — Daily journal entry
+3. **Calendar** — Monthly calendar view
+4. **Stats** — Productivity statistics
+5. **Profile** — Update name & photo
+
+Setiap tab mempertahankan state-nya saat berpindah (menggunakan IndexedStack).
+
+## Deep Linking
+
+- Notifikasi reminder jam 22:00 → tap → buka halaman **Journal**
+- (Future) Share link journal → buka journal spesifik berdasarkan tanggal
 
 ---
 

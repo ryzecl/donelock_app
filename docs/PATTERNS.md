@@ -102,22 +102,114 @@ Semua field harus sesuai PRD:
 
 ## Navigation Patterns
 
+### Arsitektur Navigasi
+
+Gunakan **go_router** sebagai router utama (sudah di `pubspec.yaml`).
+
+### Router Structure (`lib/app/router.dart`)
+
 ```dart
-// Push ke halaman baru
-Navigator.push(
-  context,
-  MaterialPageRoute(builder: (_) => const SomePage()),
-);
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateProvider);
 
-// Replace current page
-Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(builder: (_) => const SomePage()),
-);
+  return GoRouter(
+    initialLocation: '/',
+    redirect: (context, state) {
+      final isLoggedIn = authState.valueOrNull != null;
+      final isOnAuth = state.matchedLocation.startsWith('/auth');
+      final isOnSplash = state.matchedLocation == '/';
 
-// Pop back
-Navigator.pop(context);
+      if (isOnSplash) return null;
+      if (!isLoggedIn && !isOnAuth) return '/auth/login';
+      if (isLoggedIn && isOnAuth) return '/home';
+      return null;
+    },
+
+    routes: [
+      GoRoute(path: '/', builder: (_, __) => const SplashPage()),
+      GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingPage()),
+
+      GoRoute(path: '/auth/login', builder: (_, __) => const LoginPage()),
+      GoRoute(path: '/auth/register', builder: (_, __) => const RegisterPage()),
+
+      ShellRoute(
+        builder: (_, __, child) => MainShell(child: child),
+        routes: [
+          GoRoute(path: '/home', builder: (_, __) => const HomePage()),
+          GoRoute(path: '/journal', builder: (_, __) => const DailyJournalPage()),
+          GoRoute(path: '/calendar', builder: (_, __) => const CalendarPage()),
+          GoRoute(path: '/statistics', builder: (_, __) => const StatisticsPage()),
+          GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),
+        ],
+      ),
+    ],
+  );
+});
 ```
+
+### Route Guards
+
+- **Auth guard**: `redirect` di `GoRouter` otomatis arahkan ke `/auth/login` jika belum login
+- **Onboarding guard**: Jika `onboarding_completed` false, redirect ke `/onboarding`
+- **Logout**: Panggil `context.go('/auth/login')` setelah signOut untuk clear stack
+
+### Bottom Navigation (ShellRoute)
+
+`ShellRoute` membungkus halaman-halaman utama dengan `MainShell` yang berisi `BottomNavigationBar` + `IndexedStack`. Ini mempertahankan state tiap tab saat berpindah.
+
+```dart
+class MainShell extends StatelessWidget {
+  final Widget child;
+  const MainShell({required this.child, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _calculateIndex(context),
+        onTap: (index) => _onTabTapped(index, context),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.edit), label: "Journal"),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Deep Linking (Notification Tap)
+
+Saat notifikasi di-tap, navigasi ke halaman journal:
+
+```dart
+// Di NotificationService
+onDidReceiveNotificationResponse: (details) {
+  ref.read(routerProvider).go('/journal');
+}
+```
+
+### Navigasi Imperatif (Push / Pop)
+
+Meskipun pakai go_router, `Navigator.push` masih bisa digunakan untuk halaman-halaman sederhana yang tidak perlu route:
+- Push: `Navigator.push(context, MaterialPageRoute(builder: (_) => const DetailPage()))`
+- Pop: `Navigator.pop(context)`
+
+Tapi preferensi utama tetap `context.go()` atau `context.push()` dari go_router.
+
+### Aturan Navigasi
+
+1. Semua halaman utama (Home, Journal, Calendar, Statistics, Profile) harus melalui `ShellRoute` + bottom nav
+2. Halaman sementara (Splash, Onboarding, Login, Register) pakai route penuh tanpa shell
+3. Logout harus clear seluruh stack → `context.go('/auth/login')`
+4. Tidak boleh ada `Navigator.pop` yang mengarah ke SplashPage atau OnboardingPage (gunakan `PopScope` untuk blok)
+5. Setiap route baru harus ditambahkan ke router dan di-test semua state (logged in/out, onboarding done/not)
+
 
 ---
 

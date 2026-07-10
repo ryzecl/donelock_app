@@ -139,6 +139,39 @@ Container(
 )
 ```
 
+### Bottom Navigation Bar
+
+```dart
+BottomNavigationBar(
+  type: BottomNavigationBarType.fixed,
+  backgroundColor: Colors.white,
+  selectedItemColor: Colors.black,
+  unselectedItemColor: Colors.grey.shade400,
+  selectedLabelStyle: const TextStyle(
+    fontFamily: 'monospace',
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+  ),
+  unselectedLabelStyle: const TextStyle(
+    fontFamily: 'monospace',
+    fontSize: 11,
+  ),
+  items: const [
+    BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: "HOME"),
+    BottomNavigationBarItem(icon: Icon(Icons.edit_outlined), activeIcon: Icon(Icons.edit), label: "JOURNAL"),
+    BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), activeIcon: Icon(Icons.calendar_month), label: "CALENDAR"),
+    BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), activeIcon: Icon(Icons.bar_chart), label: "STATS"),
+    BottomNavigationBarItem(icon: Icon(Icons.person_outlined), activeIcon: Icon(Icons.person), label: "PROFILE"),
+  ],
+)
+```
+
+Style:
+- Warna putih, border hitam 2px di atas
+- Text monospace, uppercase
+- Icon filled untuk active, outlined untuk inactive
+- Fixed type (tidak bergerak saat ada 5 item)
+
 ---
 
 ## Dark Mode (Optional)
