@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'auth_gate.dart';
-import '../features/splash/presentation/splash_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DoneLockApp extends StatelessWidget {
+import 'router.dart';
+import 'theme.dart';
+
+class DoneLockApp extends ConsumerWidget {
   const DoneLockApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       title: 'DoneLock',
       debugShowCheckedModeBanner: false,
-
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-
-      home: const SplashPage(),
+      theme: BrutalistTheme.light,
+      routerConfig: router,
     );
   }
 }

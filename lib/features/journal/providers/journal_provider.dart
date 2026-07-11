@@ -7,3 +7,7 @@ import '../data/journal_repository.dart';
 final journalRepositoryProvider = Provider<JournalRepository>((ref) {
   return JournalRepository(FirebaseFirestore.instance, FirebaseAuth.instance);
 });
+
+final allJournalsProvider = FutureProvider((ref) async {
+  return await ref.read(journalRepositoryProvider).getAllJournals();
+});

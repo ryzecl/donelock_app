@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/storage/preferences_service.dart';
 
-import '../../onboarding/presentation/onboarding_page.dart';
-import '../../../app/auth_gate.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -28,17 +27,13 @@ class _SplashPageState extends State<SplashPage> {
     if (!mounted) return;
 
     if (onboarding) {
-      Navigator.pushReplacement(
-        context,
-
-        MaterialPageRoute(builder: (_) => const AuthGate()),
-      );
+      if (context.mounted) {
+        context.go('/auth/login');
+      }
     } else {
-      Navigator.pushReplacement(
-        context,
-
-        MaterialPageRoute(builder: (_) => const OnboardingPage()),
-      );
+      if (context.mounted) {
+        context.go('/onboarding');
+      }
     }
   }
 
@@ -50,15 +45,16 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            const Text(
-              "DoneLock 🔒",
-
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            Image.asset(
+              'assets/logo.png',
+              width: 120,
+              height: 120,
             ),
-
-            const SizedBox(height: 20),
-
-            const CircularProgressIndicator(),
+            const SizedBox(height: 32),
+            const CircularProgressIndicator(
+              strokeWidth: 3,
+              color: Colors.black,
+            ),
           ],
         ),
       ),

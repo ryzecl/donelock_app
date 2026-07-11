@@ -27,7 +27,7 @@
 
 | Feature | Status | Priority | Notes |
 |---------|--------|----------|-------|
-| Brutalist Theme Implementation | ⏳ | High | Implement DESIGN_SYSTEM.md |
+| Brutalist Theme Implementation | ✅ | High | Implement DESIGN_SYSTEM.md |
 | Contribution Heatmap (Homepage) | ⏳ | High | Grid 7×52 kayak GitHub |
 | Homepage Dashboard Redesign | ⏳ | High | Greeting, heatmap, stat, quick actions |
 | go_router Implementation | ⏳ | High | Ganti semua Navigator.push dengan GoRouter |
@@ -38,6 +38,7 @@
 | Notification Tap Deep Link | ⏳ | Medium | Tap notifikasi → buka halaman journal |
 | Widget Refactor | ⏳ | Medium | Semua UI pakai theme token |
 | PopScope Back Button Guards | ⏳ | Medium | Blokir back ke splash/onboarding |
+| App Branding | ✅ | High | Custom Icon & Native Splash Screen |
 
 ---
 

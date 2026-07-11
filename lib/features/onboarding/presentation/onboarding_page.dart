@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/storage/preferences_service.dart';
 
-import '../../auth/presentation/login_page.dart';
-import '../../../app/auth_gate.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -48,11 +47,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-
-      MaterialPageRoute(builder: (_) => const AuthGate()),
-    );
+    if (context.mounted) {
+      context.go('/auth/login');
+    }
   }
 
   @override

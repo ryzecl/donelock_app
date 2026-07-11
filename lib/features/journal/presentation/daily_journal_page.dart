@@ -13,18 +13,14 @@ class DailyJournalPage extends ConsumerStatefulWidget {
 
 class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
   bool productive = true;
-
   String mood = "😀";
-
   final controller = TextEditingController();
+  bool loading = false;
 
   Future<void> save() async {
+    setState(() => loading = true);
     final today = DateTime.now();
-
-    final date =
-        "${today.year}"
-        "${today.month.toString().padLeft(2, '0')}"
-        "${today.day.toString().padLeft(2, '0')}";
+    final date = "${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}";
 
     final journal = Journal(
       id: date,
@@ -37,98 +33,121 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
     );
 
     await ref.read(journalRepositoryProvider).saveJournal(journal);
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Journal saved!")));
+    
+    if (mounted) {
+      setState(() => loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Journal saved!", style: TextStyle(fontFamily: 'monospace'))),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Daily Reflection")),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-
+      appBar: AppBar(title: const Text("DAILY JOURNAL", style: TextStyle(fontWeight: FontWeight.bold))),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              "Was today productive?",
-
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              "WAS TODAY PRODUCTIVE?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-
+            const SizedBox(height: 16),
             Row(
               children: [
-                ChoiceChip(
-                  label: const Text("🟢 Yes"),
-
-                  selected: productive,
-
-                  onSelected: (_) {
-                    setState(() {
-                      productive = true;
-                    });
-                  },
+                Expanded(
+                  child: _brutalistChoice(
+                    text: "🟢 YES",
+                    isSelected: productive,
+                    onTap: () => setState(() => productive = true),
+                  ),
                 ),
-
-                const SizedBox(width: 10),
-
-                ChoiceChip(
-                  label: const Text("🔴 No"),
-
-                  selected: !productive,
-
-                  onSelected: (_) {
-                    setState(() {
-                      productive = false;
-                    });
-                  },
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _brutalistChoice(
+                    text: "🔴 NO",
+                    isSelected: !productive,
+                    onTap: () => setState(() => productive = false),
+                  ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 30),
-
-            const Text("Mood", style: TextStyle(fontSize: 20)),
-
+            const SizedBox(height: 32),
+            const Text("MOOD", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
             Wrap(
-              children: ["😀", "😐", "😞", "😡", "😴"]
-                  .map(
-                    (e) => ChoiceChip(
-                      label: Text(e),
-
-                      selected: mood == e,
-
-                      onSelected: (_) {
-                        setState(() {
-                          mood = e;
-                        });
-                      },
-                    ),
-                  )
-                  .toList(),
+              spacing: 12,
+              runSpacing: 12,
+              children: ["😀", "😐", "😞", "😡", "😴"].map((e) {
+                return _brutalistEmoji(
+                  emoji: e,
+                  isSelected: mood == e,
+                  onTap: () => setState(() => mood = e),
+                );
+              }).toList(),
             ),
-
-            const SizedBox(height: 30),
-
+            const SizedBox(height: 32),
+            const Text("NOTES", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
             TextField(
               controller: controller,
-
               maxLines: 5,
-
               decoration: const InputDecoration(
                 hintText: "Write your thoughts...",
               ),
             ),
-
-            const SizedBox(height: 30),
-
-            ElevatedButton(onPressed: save, child: const Text("Save")),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: loading ? null : save,
+              child: loading 
+                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black)) 
+                : const Text("SAVE JOURNAL"),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _brutalistChoice({required String text, required bool isSelected, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.black : Colors.white,
+          border: Border.all(color: Colors.black, width: 3),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _brutalistEmoji({required String emoji, required bool isSelected, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.black : Colors.white,
+          border: Border.all(color: Colors.black, width: 3),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          emoji,
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );
