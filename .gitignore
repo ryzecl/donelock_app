@@ -86,6 +86,11 @@ android/app/key.properties
 .env*
 *.env
 
+# Firebase Configs
+google-services.json
+GoogleService-Info.plist
+firebase_options.dart
+
 # Build outputs
 *.apk
 *.aab
