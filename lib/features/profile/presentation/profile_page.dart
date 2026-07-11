@@ -183,6 +183,67 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 child: const Text("LOGOUT"),
               ),
             ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade900,
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', letterSpacing: 2),
+                ),
+                onPressed: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: Colors.red.shade900,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                        side: BorderSide(color: Colors.black, width: 3),
+                      ),
+                      title: const Text("DELETE ACCOUNT", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                      content: const Text("This action is permanent and cannot be undone. Are you absolutely sure?", style: TextStyle(fontFamily: 'monospace', color: Colors.white)),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text("CANCEL", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("DELETE"),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirm == true) {
+                    setState(() => loading = true);
+                    try {
+                      await ref.read(authRepositoryProvider).deleteAccount();
+                      if (context.mounted) {
+                        context.go('/auth/login');
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e.toString(), style: const TextStyle(fontFamily: 'monospace'))),
+                        );
+                      }
+                    }
+                    if (mounted) {
+                      setState(() => loading = false);
+                    }
+                  }
+                },
+                child: const Text("DELETE ACCOUNT"),
+              ),
+            ),
           ],
         ),
       ),

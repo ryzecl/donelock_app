@@ -61,6 +61,59 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
+  Future<void> forgotPassword() async {
+    final resetEmailController = TextEditingController(text: emailController.text);
+    final send = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: Colors.black, width: 3),
+        ),
+        title: const Text("FORGOT PASSWORD", style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text("Enter your email to receive a reset link.", style: TextStyle(fontFamily: 'monospace')),
+            const SizedBox(height: 16),
+            TextField(
+              controller: resetEmailController,
+              decoration: const InputDecoration(labelText: "Email"),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("CANCEL", style: TextStyle(color: Colors.black)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("SEND"),
+          ),
+        ],
+      ),
+    );
+
+    if (send == true && resetEmailController.text.trim().isNotEmpty) {
+      try {
+        await ref.read(authRepositoryProvider).resetPassword(resetEmailController.text.trim());
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Password reset link sent!", style: TextStyle(fontFamily: 'monospace'))),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString(), style: const TextStyle(fontFamily: 'monospace'))),
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +142,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               obscureText: true,
               decoration: const InputDecoration(labelText: "Password"),
             ),
-            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: forgotPassword,
+                child: const Text("Forgot Password?", style: TextStyle(color: Colors.grey)),
+              ),
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: loading ? null : login,
               child: loading

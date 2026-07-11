@@ -28,15 +28,15 @@
 | Feature | Status | Priority | Notes |
 |---------|--------|----------|-------|
 | Brutalist Theme Implementation | ✅ | High | Implement DESIGN_SYSTEM.md |
-| Contribution Heatmap (Homepage) | ⏳ | High | Grid 7×52 kayak GitHub |
-| Homepage Dashboard Redesign | ⏳ | High | Greeting, heatmap, stat, quick actions |
-| go_router Implementation | ⏳ | High | Ganti semua Navigator.push dengan GoRouter |
-| Bottom Navigation Bar | ⏳ | High | 5 tabs: Home, Journal, Calendar, Stats, Profile |
-| Route Guards (Auth + Onboarding) | ⏳ | High | Centralized redirect logic |
-| Logout Stack Clearing | ⏳ | High | `context.go('/auth/login')` setelah signOut |
-| Calendar UI Customization | ⏳ | Medium | Tampilan brutalist di calendar |
+| Contribution Heatmap (Homepage) | ✅ | High | Grid 7×52 kayak GitHub |
+| Homepage Dashboard Redesign | ✅ | High | Greeting, heatmap, stat, quick actions |
+| go_router Implementation | ✅ | High | Ganti semua Navigator.push dengan GoRouter |
+| Bottom Navigation Bar | ✅ | High | 5 tabs: Home, Journal, Calendar, Stats, Profile |
+| Route Guards (Auth + Onboarding) | ✅ | High | Centralized redirect logic |
+| Logout Stack Clearing | ✅ | High | `context.go('/auth/login')` setelah signOut |
+| Calendar UI Customization | ✅ | Medium | Heatmap view per week/month/year |
 | Notification Tap Deep Link | ⏳ | Medium | Tap notifikasi → buka halaman journal |
-| Widget Refactor | ⏳ | Medium | Semua UI pakai theme token |
+| Widget Refactor | ✅ | Medium | Semua UI pakai theme token |
 | PopScope Back Button Guards | ⏳ | Medium | Blokir back ke splash/onboarding |
 | App Branding | ✅ | High | Custom Icon & Native Splash Screen |
 
@@ -46,8 +46,10 @@
 
 | Feature | Status | Priority | Notes |
 |---------|--------|----------|-------|
-| Google Sign-In | ⏳ | High | Firebase Auth + Google |
-| Profile Page | ⏳ | High | Update name & photo |
+| Google Sign-In | ✅ | High | Firebase Auth + Google |
+| Profile Page | ✅ | High | Update name, password, logout |
+| Forgot Password | ✅ | High | Send reset link via Firebase |
+| Delete Account | ✅ | High | Delete from Firestore & Auth |
 | Streak Counter | ⏳ | Medium | Hari beruntun productive |
 | Photo Profile Upload | ⏳ | Medium | Firebase Storage |
 
