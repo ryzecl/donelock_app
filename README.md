@@ -4,6 +4,7 @@
 
 DoneLock adalah aplikasi **personal productivity journaling** yang membantu kamu melacak, merefleksikan, dan membangun konsistensi produktivitas harian. Bukan sekadar to-do list — DoneLock adalah tempat aman untuk mencatat bagaimana harimu berjalan, apakah produktif atau tidak, dan melihat pola produktivitasmu dari waktu ke waktu.
 
+📥 **Mau langsung nyobain?** [Download APK DoneLock di sini](https://drive.google.com/drive/folders/1PH-QNujLutOjX1bNpldwa8Fq9TKCs1rW?usp=sharing)
 ---
 
 ## 🧠 Storytelling — Kenapa DoneLock?
