@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../auth/providers/auth_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
+import '../../notification/notification_service.dart';
+import 'package:donelock/core/storage/preferences_service.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -17,6 +19,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   final passwordController = TextEditingController();
   bool loading = false;
   bool _initialized = false;
+  TimeOfDay? _reminderTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadReminderTime();
+  }
+
+  Future<void> _loadReminderTime() async {
+    final time = await PreferencesService().getReminderTime();
+    setState(() {
+      _reminderTime = TimeOfDay(hour: time['hour'] ?? 22, minute: time['minute'] ?? 0);
+    });
+  }
 
   Future<void> updateProfile() async {
     setState(() => loading = true);
@@ -132,6 +148,84 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ),
             const SizedBox(height: 48),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.black, width: 2),
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', letterSpacing: 2),
+                ),
+                onPressed: () async {
+                  final initialTime = _reminderTime ?? const TimeOfDay(hour: 22, minute: 0);
+                  final pickedTime = await showTimePicker(
+                    context: context,
+                    initialTime: initialTime,
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: Colors.black,
+                            onPrimary: Colors.white,
+                            onSurface: Colors.black,
+                          ),
+                          textButtonTheme: TextButtonThemeData(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                  );
+
+                  if (pickedTime != null && mounted) {
+                    await PreferencesService().setReminderTime(pickedTime.hour, pickedTime.minute);
+                    setState(() {
+                      _reminderTime = pickedTime;
+                    });
+                    
+                    final service = ref.read(notificationServiceProvider);
+                    await service.scheduleDailyReminder();
+                    
+                    if (mounted) {
+                      UIUtils.showSuccess(context, "Reminder time updated to ${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}");
+                    }
+                  }
+                },
+                child: Text("SET REMINDER TIME (${_reminderTime?.hour.toString().padLeft(2, '0') ?? '22'}:${_reminderTime?.minute.toString().padLeft(2, '0') ?? '00'})"),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.black, width: 2),
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', letterSpacing: 2),
+                ),
+                onPressed: () async {
+                  final service = ref.read(notificationServiceProvider);
+                  final granted = await service.requestPermission();
+                  if (mounted) {
+                    if (granted) {
+                      await service.scheduleDailyReminder();
+                      UIUtils.showSuccess(context, "Notification permission granted!");
+                    } else {
+                      UIUtils.showError(context, "Notification permission denied.");
+                    }
+                  }
+                },
+                child: const Text("ALLOW NOTIFICATIONS"),
+              ),
+            ),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(

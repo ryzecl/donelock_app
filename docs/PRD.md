@@ -155,7 +155,7 @@ Menampilkan & mengupdate:
 ## Notification
 
 Reminder harian:
-- 22:00
+- Customizable time (default 22:00)
 - "Bagaimana harimu hari ini? Jangan lupa reflection."
 
 ---

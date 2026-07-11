@@ -16,7 +16,7 @@
 | Daily Journal | ✅ | CRUD dengan mood & productivity |
 | Calendar | ✅ | Monthly view dengan green/red indicator |
 | Statistics | ✅ | Productivity percentage, mood summary |
-| Notification | ✅ | Daily reminder at 22:00 |
+| Notification | ✅ | Customizable daily reminder (default 22:00) |
 | Onboarding | ✅ | 3 halaman onboarding |
 | Splash Screen | ✅ | First launch detection |
 | Firebase Security Rules | ✅ | User only read/write own data |
