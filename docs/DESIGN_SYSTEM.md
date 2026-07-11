@@ -12,7 +12,7 @@ Brutalist design: bold, raw, functional. Tidak ada elemen dekoratif yang tidak p
 |-------|-------|-----|-------|
 | `primary` | Hitam pekat | `#0D0D0D` | Text, border, header |
 | `primaryLight` | Abu gelap | `#2B2B2B` | Card background, button |
-| `accent` | Merah brutal (opsional) | `#CC2936` | Tombol aksi, highlight |
+| `accent` | Kuning DoneLock | `#FFCA16` | Tombol aksi, highlight, header |
 
 ### Background
 | Token | Color | Hex | Usage |

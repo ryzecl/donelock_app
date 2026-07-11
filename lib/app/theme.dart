@@ -5,28 +5,30 @@ class BrutalistTheme {
     const primaryColor = Color(0xFF0D0D0D);
     const bgColor = Color(0xFFF5F5F0);
     const surfaceColor = Color(0xFFFFFFFF);
+    const accentColor = Color(0xFFFFCA16); // Kuning Custom DoneLock
 
 
     return ThemeData(
       fontFamily: 'monospace',
       colorScheme: ColorScheme.light(
         primary: primaryColor,
+        secondary: accentColor,
         surface: bgColor, // Scaffold background
         onSurface: primaryColor,
         error: const Color(0xFFEF4444),
       ),
       scaffoldBackgroundColor: bgColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: surfaceColor,
+        backgroundColor: accentColor,
         foregroundColor: primaryColor,
         elevation: 0,
         shape: Border(
-          bottom: BorderSide(color: primaryColor, width: 2),
+          bottom: BorderSide(color: primaryColor, width: 3),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: surfaceColor,
+          backgroundColor: accentColor,
           foregroundColor: primaryColor,
           side: const BorderSide(color: primaryColor, width: 3),
           shape: const RoundedRectangleBorder(
