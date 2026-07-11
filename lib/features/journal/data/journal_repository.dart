@@ -96,6 +96,30 @@ class JournalRepository {
     return snapshot.docs.map((doc) => Journal.fromFirestore(doc)).toList();
   }
 
+  Stream<List<Journal>> getMonthlyJournalsStream(String month) {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final start = "${month}01";
+    final year = int.parse(month.substring(0, 4));
+    final mon = int.parse(month.substring(4));
+    
+    String end;
+    if (mon == 12) {
+      end = "${year + 1}0101";
+    } else {
+      end = "$year${(mon + 1).toString().padLeft(2, '0')}01";
+    }
+
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("journals")
+        .where("date", isGreaterThanOrEqualTo: start)
+        .where("date", isLessThan: end)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Journal.fromFirestore(doc)).toList());
+  }
+
   Future<List<Map<String, dynamic>>> getAllJournals() async {
     final uid = auth.currentUser!.uid;
 
@@ -106,5 +130,16 @@ class JournalRepository {
         .get();
 
     return snapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  Stream<List<Map<String, dynamic>>> getAllJournalsStream() {
+    final uid = auth.currentUser!.uid;
+
+    return firestore
+        .collection("users")
+        .doc(uid)
+        .collection("journals")
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 }
