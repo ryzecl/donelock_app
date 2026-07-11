@@ -231,16 +231,21 @@ class BrutalistTheme {
 
 ---
 
-## Error Handling Pattern
+## Error & Success Handling Pattern (Centralized)
+
+Semua UI feedback (error atau success) wajib menggunakan `UIUtils` dari `lib/core/utils/ui_utils.dart` agar konsisten dengan tema Brutalist dan memiliki penanganan error message yang profesional (termasuk translasi error Firebase).
 
 ```dart
+import '../../core/utils/ui_utils.dart';
+
 try {
   await someOperation();
+  if (context.mounted) {
+    UIUtils.showSuccess(context, "Operation successful!");
+  }
 } catch (e) {
   if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(e.toString())),
-    );
+    UIUtils.showError(context, e);
   }
 }
 ```

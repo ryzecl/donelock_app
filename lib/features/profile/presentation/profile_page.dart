@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../auth/providers/auth_provider.dart';
+import 'package:donelock/core/utils/ui_utils.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -35,16 +36,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ref.invalidate(authStateProvider);
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Profile updated successfully!", style: TextStyle(fontFamily: 'monospace'))),
-          );
+          UIUtils.showSuccess(context, "Profile updated successfully!");
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString(), style: const TextStyle(fontFamily: 'monospace'))),
-        );
+        UIUtils.showError(context, e);
       }
     }
     if (mounted) {
@@ -231,9 +228,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(e.toString(), style: const TextStyle(fontFamily: 'monospace'))),
-                        );
+                        UIUtils.showError(context, e);
                       }
                     }
                     if (mounted) {

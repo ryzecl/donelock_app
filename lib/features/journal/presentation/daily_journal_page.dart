@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/journal_model.dart';
 import '../providers/journal_provider.dart';
+import 'package:donelock/core/utils/ui_utils.dart';
 
 class DailyJournalPage extends ConsumerStatefulWidget {
   const DailyJournalPage({super.key});
@@ -36,9 +37,7 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
     
     if (mounted) {
       setState(() => loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Journal saved!", style: TextStyle(fontFamily: 'monospace'))),
-      );
+      UIUtils.showSuccess(context, "Journal saved!");
     }
   }
 

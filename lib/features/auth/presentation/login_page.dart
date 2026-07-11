@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import 'package:donelock/core/utils/ui_utils.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -30,9 +31,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        UIUtils.showError(context, e);
       }
     }
 
@@ -51,9 +50,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        UIUtils.showError(context, e);
       }
     }
     if (mounted) {
@@ -100,15 +97,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       try {
         await ref.read(authRepositoryProvider).resetPassword(resetEmailController.text.trim());
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Password reset link sent!", style: TextStyle(fontFamily: 'monospace'))),
-          );
+          UIUtils.showSuccess(context, "Password reset link sent!");
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString(), style: const TextStyle(fontFamily: 'monospace'))),
-          );
+          UIUtils.showError(context, e);
         }
       }
     }
