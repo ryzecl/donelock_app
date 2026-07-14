@@ -134,7 +134,7 @@ Splash → Auth Check → Home (Bottom Navigation)
 ### 2. Instalasi Proyek
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/donelock.git
+git clone https://github.com/ryzecl/donelock.git
 cd donelock
 
 # Install dependencies
