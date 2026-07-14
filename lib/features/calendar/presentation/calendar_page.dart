@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/calendar_helper.dart';
 import '../providers/calendar_provider.dart';
@@ -352,7 +353,22 @@ class _JournalDetail extends ConsumerWidget {
                 color: Colors.white,
                 border: Border.all(color: Colors.black, width: 2),
               ),
-              child: Text("No journal for ${selectedDay!.day}/${selectedDay!.month}/${selectedDay!.year}"),
+              child: Column(
+                children: [
+                  Text("No journal for ${selectedDay!.day}/${selectedDay!.month}/${selectedDay!.year}"),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.push('/journal_edit', extra: selectedDay!);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text("ADD JOURNAL"),
+                  ),
+                ],
+              ),
             ),
           );
         }

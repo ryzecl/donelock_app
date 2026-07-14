@@ -21,7 +21,7 @@ Frontend:
 Backend:
 - Firebase Authentication (Email/Password + Google)
 - Cloud Firestore
-- Firebase Storage (untuk foto profil)
+- ImgBB API (untuk upload foto profil gratis)
 
 Local:
 - Shared Preferences
@@ -121,7 +121,7 @@ Menampilkan:
 - 🟢 Productive day
 - 🔴 Not productive day
 
-Klik tanggal menampilkan journal detail.
+Klik tanggal menampilkan journal detail, jika kosong bisa menambah journal (backdate).
 Custom tampilan dengan theme brutalist.
 
 ## Contribution Heatmap
@@ -155,7 +155,7 @@ Menampilkan & mengupdate:
 ## Notification
 
 Reminder harian:
-- Customizable time (default 22:00)
+- Customizable time tersimpan di Firestore & Local (sinkronisasi)
 - "Bagaimana harimu hari ini? Jangan lupa reflection."
 
 ---

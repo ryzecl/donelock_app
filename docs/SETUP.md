@@ -51,21 +51,11 @@ flutter pub get
 2. **Your apps** → iOS → tambah `GoogleService-Info.plist`
 3. Download dan taruh di folder Xcode project
 
-### 2.4 Firebase Storage
+### 2.4 Setup ImgBB (Foto Profil)
 
-1. Firebase Console → **Storage** → **Get Started**
-2. Setup Storage rules:
-   ```
-   rules_version = '2';
-   service firebase.storage {
-     match /b/{bucket}/o {
-       match /profiles/{userId}/{fileName} {
-         allow read: if true;
-         allow write: if request.auth != null && request.auth.uid == userId;
-       }
-     }
-   }
-   ```
+1. Daftar ke [ImgBB API](https://api.imgbb.com/)
+2. Buat API Key
+3. Taruh API Key di file `lib/core/utils/constants.dart` pada `AppConstants.imgbbApiKey`.
 
 ### 2.5 Firebase Security Rules (Sudah)
 
@@ -122,6 +112,7 @@ Hasil build di: `build/app/outputs/flutter-apk/app-release.apk`
 
 ### Notification tidak muncul
 - Android 13+ perlu permission `POST_NOTIFICATIONS` manual via settings
+- Pastikan zona waktu sudah diinisialisasi menggunakan `flutter_timezone`
 - Cek `AndroidManifest.xml` sudah ada permission-nya
 
 ### Build error setelah add dependency

@@ -51,7 +51,7 @@
 | Forgot Password | ✅ | High | Send reset link via Firebase |
 | Delete Account | ✅ | High | Delete from Firestore & Auth |
 | Streak Counter | ⏳ | Medium | Hari beruntun productive |
-| Photo Profile Upload | ⏳ | Medium | Firebase Storage |
+| Photo Profile Upload | ✅ | Medium | ImgBB API |
 
 ---
 
@@ -70,7 +70,7 @@
 
 - [ ] Firebase Authentication aktifkan metode **Google Sign-In**
 - [ ] Firebase Console: buka **Authentication** → **Sign-in method** → enable **Google**
-- [ ] Firebase Console: buka **Storage** → setup Firebase Storage untuk foto profil
+- [ ] ImgBB API: Taruh API Key di `lib/core/utils/constants.dart`
 - [ ] `pubspec.yaml`: tambah dependency yang diperlukan (google_sign_in, image_picker, dll)
 - [ ] Android: tambah SHA-1 fingerprint di Firebase Console untuk Google login
 - [ ] iOS: tambah `GoogleService-Info.plist` di folder Xcode project

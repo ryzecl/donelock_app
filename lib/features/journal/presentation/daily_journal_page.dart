@@ -6,7 +6,8 @@ import '../providers/journal_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
 
 class DailyJournalPage extends ConsumerStatefulWidget {
-  const DailyJournalPage({super.key});
+  final DateTime? initialDate;
+  const DailyJournalPage({super.key, this.initialDate});
 
   @override
   ConsumerState<DailyJournalPage> createState() => _DailyJournalPageState();
@@ -20,8 +21,8 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
 
   Future<void> save() async {
     setState(() => loading = true);
-    final today = DateTime.now();
-    final date = "${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}";
+    final targetDate = widget.initialDate ?? DateTime.now();
+    final date = "${targetDate.year}${targetDate.month.toString().padLeft(2, '0')}${targetDate.day.toString().padLeft(2, '0')}";
 
     final journal = Journal(
       id: date,
@@ -43,8 +44,12 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
 
   @override
   Widget build(BuildContext context) {
+    final title = widget.initialDate != null 
+        ? "JOURNAL - ${widget.initialDate!.day}/${widget.initialDate!.month}/${widget.initialDate!.year}"
+        : "DAILY JOURNAL";
+
     return Scaffold(
-      appBar: AppBar(title: const Text("DAILY JOURNAL", style: TextStyle(fontWeight: FontWeight.bold))),
+      appBar: AppBar(title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(

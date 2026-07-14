@@ -64,6 +64,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/auth/register',
         builder: (context, state) => const RegisterPage(),
       ),
+      GoRoute(
+        path: '/journal_edit',
+        builder: (context, state) => DailyJournalPage(initialDate: state.extra as DateTime?),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainShell(navigationShell: navigationShell);

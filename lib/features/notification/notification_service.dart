@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:donelock/core/storage/preferences_service.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 final notificationServiceProvider = Provider((ref) => NotificationService());
 
@@ -12,6 +13,12 @@ class NotificationService {
 
   Future<void> initialize() async {
     tz.initializeTimeZones();
+    try {
+      final info = await FlutterTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(info.identifier));
+    } catch (e) {
+      // ignore
+    }
 
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
