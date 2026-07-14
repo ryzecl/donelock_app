@@ -348,6 +348,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     },
                     child: const Text("ALLOW NOTIFICATIONS"),
                   ),
+                  const SizedBox(height: 12),
+                  OutlinedButton(
+                    style: _brutalistOutlineStyle(color: Colors.green),
+                    onPressed: () async {
+                      final service = ref.read(notificationServiceProvider);
+                      await service.showDailyReminder();
+                    },
+                    child: const Text("TEST NOTIFICATION"),
+                  ),
                 ],
               ),
             ),

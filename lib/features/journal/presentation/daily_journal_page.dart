@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/journal_model.dart';
 import '../providers/journal_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class DailyJournalPage extends ConsumerStatefulWidget {
   final DateTime? initialDate;
@@ -40,6 +41,30 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
       setState(() => loading = false);
       UIUtils.showSuccess(context, "Journal saved!");
     }
+  }
+
+  void _showEmojiPicker() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          height: 400,
+          color: Colors.white,
+          child: SafeArea(
+            child: EmojiPicker(
+              onEmojiSelected: (category, emoji) {
+                setState(() {
+                  mood = emoji.emoji;
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -82,16 +107,28 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
             const SizedBox(height: 32),
             const Text("MOOD", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: ["😀", "😐", "😞", "😡", "😴"].map((e) {
-                return _brutalistEmoji(
-                  emoji: e,
-                  isSelected: mood == e,
-                  onTap: () => setState(() => mood = e),
-                );
-              }).toList(),
+            Row(
+              children: [
+                _brutalistEmoji(
+                  emoji: mood,
+                  isSelected: true,
+                  onTap: () {},
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      side: const BorderSide(color: Colors.black, width: 3),
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', letterSpacing: 1),
+                    ),
+                    onPressed: _showEmojiPicker,
+                    child: const Text("CHANGE MOOD"),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 32),
             const Text("NOTES", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
