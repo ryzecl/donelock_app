@@ -60,11 +60,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     });
   }
 
-  Future<String?> _uploadToImgBB(File imageFile) async {
+  Future<String?> _uploadToImgBB(XFile imageFile) async {
     final uri = Uri.parse('https://api.imgbb.com/1/upload');
     final request = http.MultipartRequest('POST', uri);
     request.fields['key'] = AppConstants.imgbbApiKey;
-    request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+    final bytes = await imageFile.readAsBytes();
+    request.files.add(http.MultipartFile.fromBytes('image', bytes, filename: imageFile.name));
     
     final response = await request.send();
     final responseData = await response.stream.bytesToString();
@@ -82,7 +83,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     if (pickedFile != null) {
       setState(() => uploadingImage = true);
       try {
-        final url = await _uploadToImgBB(File(pickedFile.path));
+        final url = await _uploadToImgBB(pickedFile);
         if (url != null) {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {

@@ -161,7 +161,7 @@ class HomePage extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: () {
-                context.go('/journal/new'); // Asumsi ada route untuk new journal
+                context.go('/journal');
               },
               child: const Text("📝 WRITE TODAY'S JOURNAL", style: TextStyle(fontWeight: FontWeight.bold)),
             )
