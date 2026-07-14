@@ -3,117 +3,167 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../journal/providers/journal_provider.dart';
 
-class StatisticsPage extends ConsumerStatefulWidget {
+class StatisticsPage extends ConsumerWidget {
   const StatisticsPage({super.key});
 
   @override
-  ConsumerState<StatisticsPage> createState() => _StatisticsPageState();
-}
-
-class _StatisticsPageState extends ConsumerState<StatisticsPage> {
-  int productiveDays = 0;
-  int unproductiveDays = 0;
-  int total = 0;
-  Map<String, int> moods = {};
-
-  @override
-  void initState() {
-    super.initState();
-    load();
-  }
-
-  Future<void> load() async {
-    final data = await ref.read(journalRepositoryProvider).getAllJournals();
-    int good = 0;
-    int bad = 0;
-    Map<String, int> moodData = {};
-
-    for (final item in data) {
-      if (item["productive"] == true || item["productive"] == "productive") {
-        good++;
-      } else {
-        bad++;
-      }
-      final mood = item["mood"] ?? "";
-      moodData[mood] = (moodData[mood] ?? 0) + 1;
-    }
-
-    setState(() {
-      productiveDays = good;
-      unproductiveDays = bad;
-      total = data.length;
-      moods = moodData;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final percentage = total == 0 ? 0 : ((productiveDays / total) * 100).round();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final journalsAsync = ref.watch(allJournalsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("STATISTICS", style: TextStyle(fontWeight: FontWeight.bold))),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text("PRODUCTIVITY SCORE", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 3),
-              ),
-              child: LinearProgressIndicator(
-                value: percentage / 100,
-                minHeight: 40,
-                backgroundColor: Colors.white,
-                color: const Color(0xFF4ADE80), // Hijau brutalist
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              "$percentage%",
-              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, letterSpacing: -2),
-              textAlign: TextAlign.right,
-            ),
-            const SizedBox(height: 40),
-            _statBox("TOTAL REFLECTION", "$total"),
-            const SizedBox(height: 16),
-            Row(
+      body: journalsAsync.when(
+        data: (data) {
+          int productiveDays = 0;
+          int unproductiveDays = 0;
+          int total = data.length;
+          Map<String, int> moodData = {};
+
+          for (final item in data) {
+            if (item["productive"] == true || item["productive"] == "productive") {
+              productiveDays++;
+            } else {
+              unproductiveDays++;
+            }
+            final mood = item["mood"] ?? "";
+            if (mood.toString().isNotEmpty) {
+              moodData[mood] = (moodData[mood] ?? 0) + 1;
+            }
+          }
+          
+          final sortedMoods = moodData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
+          // Calculate current streak
+          int currentStreak = 0;
+          if (data.isNotEmpty) {
+            final sortedJournals = List<Map<String, dynamic>>.from(data)
+              ..sort((a, b) => b['date'].compareTo(a['date']));
+              
+            final todayStr = "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, '0')}${DateTime.now().day.toString().padLeft(2, '0')}";
+            DateTime checkDate = DateTime.now();
+            bool continueStreak = true;
+            
+            final todayEntry = sortedJournals.where((j) => j['date'] == todayStr).firstOrNull;
+            if (todayEntry == null || (todayEntry['productive'] != true && todayEntry['productive'] != 'productive')) {
+              checkDate = checkDate.subtract(const Duration(days: 1));
+            }
+
+            while (continueStreak) {
+              final dateStr = "${checkDate.year}${checkDate.month.toString().padLeft(2, '0')}${checkDate.day.toString().padLeft(2, '0')}";
+              final entry = sortedJournals.where((j) => j['date'] == dateStr).firstOrNull;
+              
+              if (entry != null && (entry['productive'] == true || entry['productive'] == "productive")) {
+                currentStreak++;
+                checkDate = checkDate.subtract(const Duration(days: 1));
+              } else {
+                continueStreak = false;
+              }
+            }
+          }
+
+          final percentage = total == 0 ? 0 : ((productiveDays / total) * 100).round();
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: _statBox("🟢 PROD.", "$productiveDays")),
-                const SizedBox(width: 16),
-                Expanded(child: _statBox("🔴 NOT PROD.", "$unproductiveDays")),
-              ],
-            ),
-            const SizedBox(height: 40),
-            const Text("MOOD SUMMARY", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: moods.entries.map((e) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                // HERO SCORE CARD
+                Container(
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 2),
+                    border: Border.all(color: Colors.black, width: 4),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black, offset: Offset(6, 6)),
+                    ]
                   ),
-                  child: Text("${e.key} x${e.value}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                );
-              }).toList(),
+                  child: Column(
+                    children: [
+                      const Text("PRODUCTIVITY SCORE", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 2)),
+                      const SizedBox(height: 16),
+                      Text(
+                        "$percentage%",
+                        style: const TextStyle(fontSize: 64, fontWeight: FontWeight.bold, height: 1),
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 2),
+                        ),
+                        child: LinearProgressIndicator(
+                          value: percentage / 100,
+                          backgroundColor: Colors.white,
+                          color: const Color(0xFF4ADE80),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 48),
+                const Text("OVERVIEW", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 16),
+                
+                // 2x2 GRID
+                Row(
+                  children: [
+                    Expanded(child: _statBox("TOTAL", "$total", Colors.white)),
+                    const SizedBox(width: 16),
+                    Expanded(child: _statBox("STREAK", "$currentStreak 🔥", Colors.orange.shade100)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(child: _statBox("PROD.", "$productiveDays", const Color(0xFFBBF7D0))),
+                    const SizedBox(width: 16),
+                    Expanded(child: _statBox("UNPROD.", "$unproductiveDays", const Color(0xFFFECACA))),
+                  ],
+                ),
+
+                const SizedBox(height: 48),
+                const Text("MOOD SUMMARY", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 16),
+                
+                sortedMoods.isEmpty 
+                  ? const Text("No moods recorded yet.", style: TextStyle(color: Colors.grey))
+                  : Column(
+                      children: sortedMoods.map((e) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(e.key, style: const TextStyle(fontSize: 32)),
+                              Text("x${e.value}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                const SizedBox(height: 40),
+              ],
             ),
-          ],
-        ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator(color: Colors.black)),
+        error: (e, st) => Center(child: Text("Error: $e")),
       ),
     );
   }
 
-  Widget _statBox(String title, String value) {
+  Widget _statBox(String title, String value, Color bgColor) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: bgColor,
         border: Border.all(color: Colors.black, width: 3),
       ),
       child: Column(
