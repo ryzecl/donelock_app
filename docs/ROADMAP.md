@@ -50,8 +50,9 @@
 | Profile Page | ✅ | High | Update name, password, logout |
 | Forgot Password | ✅ | High | Send reset link via Firebase |
 | Delete Account | ✅ | High | Delete from Firestore & Auth |
-| Streak Counter | ⏳ | Medium | Hari beruntun productive |
+| Streak Counter | ✅ | Medium | Hari beruntun productive di Home & Stats |
 | Photo Profile Upload | ✅ | Medium | ImgBB API |
+| AI Brainstorming | ✅ | High | Chatbot pakai Groq API (llama3-8b-8192) |
 
 ---
 

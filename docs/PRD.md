@@ -152,6 +152,14 @@ Menampilkan & mengupdate:
 - Email (read-only)
 - Foto profil (upload dari galeri/kamera)
 
+## AI Brainstorming
+
+Chatbot untuk membantu user berpikir dan berefleksi:
+- Menggunakan Groq API (model llama3-8b-8192)
+- State disimpan sementara menggunakan Riverpod
+- Diakses via tombol Floating Action Button di Home
+- Tema brutalist konsisten dengan aplikasi
+
 ## Notification
 
 Reminder harian:

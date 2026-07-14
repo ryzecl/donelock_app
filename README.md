@@ -147,6 +147,7 @@ Untuk alasan keamanan, semua API Key dipisahkan ke dalam file `.env` agar tidak 
 2. Buka file `.env` dan isi kunci API-nya:
    ```env
    IMGBB_API_KEY=dapatkan_dari_api_imgbb_com
+   GROQ_API_KEY=dapatkan_dari_console_groq_com
    FIREBASE_API_KEY_WEB=dapatkan_dari_firebase_console
    FIREBASE_API_KEY_ANDROID=dapatkan_dari_firebase_console
    FIREBASE_API_KEY_IOS=dapatkan_dari_firebase_console
@@ -228,6 +229,7 @@ lib/
 - Google Sign-In
 - Profile page (update name & photo)
 - ImgBB API Integration for Free Uploads
+- AI Brainstorming Chatbot (Groq API)
 
 ### Phase 4 ⏳ — Advanced
 - Dark mode

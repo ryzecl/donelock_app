@@ -16,6 +16,7 @@ import '../features/journal/presentation/daily_journal_page.dart';
 import '../features/calendar/presentation/calendar_page.dart';
 import '../features/statistics/presentation/statistics_page.dart';
 import '../features/profile/presentation/profile_page.dart';
+import '../features/chat/presentation/chat_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -67,6 +68,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/journal_edit',
         builder: (context, state) => DailyJournalPage(initialDate: state.extra as DateTime?),
+      ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) => const ChatPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

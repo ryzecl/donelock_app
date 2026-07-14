@@ -25,6 +25,17 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("DoneLock 🔒", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/chat'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: Colors.black, width: 2),
+        ),
+        icon: const Icon(Icons.smart_toy),
+        label: const Text("AI BRAINSTORM", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace')),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
