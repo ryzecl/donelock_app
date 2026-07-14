@@ -93,7 +93,7 @@ Setiap elemen punya tujuan. Tidak ada dekorasi yang tidak perlu. Brutalist bukan
 | **State Management** | Riverpod |
 | **Backend** | Firebase Auth + Cloud Firestore |
 | **Auth** | Email/Password + Google Sign-In |
-| **Storage** | Firebase Storage (foto profil) |
+| **Storage** | ImgBB API (upload foto profil) |
 | **Local** | SharedPreferences |
 | **Notification** | flutter_local_notifications |
 | **Navigation** | go_router |
@@ -125,13 +125,13 @@ Splash → Auth Check → Home (Bottom Navigation)
 
 ## 🚀 Cara Mulai
 
-### Prasyarat
+### 1. Prasyarat
 - Flutter SDK ^3.11.5
-- Firebase account
+- Akun Firebase (untuk database dan autentikasi)
+- Akun ImgBB (untuk upload foto profil gratis)
 - Android Studio / VS Code
 
-### Instalasi
-
+### 2. Instalasi Proyek
 ```bash
 # Clone repository
 git clone https://github.com/yourusername/donelock.git
@@ -139,32 +139,44 @@ cd donelock
 
 # Install dependencies
 flutter pub get
-
-# Jalankan aplikasi
-flutter run
 ```
 
-### Firebase Setup
-Karena alasan keamanan, file konfigurasi Firebase tidak disertakan di repository ini. Kamu harus membuat project Firebase-mu sendiri:
+### 3. Setup Environment Variables (.env)
+Untuk alasan keamanan, semua API Key dipisahkan ke dalam file `.env` agar tidak bocor ke publik.
+1. Copy file `.env.example` dan ubah namanya menjadi `.env`.
+2. Buka file `.env` dan isi kunci API-nya:
+   ```env
+   IMGBB_API_KEY=dapatkan_dari_api_imgbb_com
+   FIREBASE_API_KEY_WEB=dapatkan_dari_firebase_console
+   FIREBASE_API_KEY_ANDROID=dapatkan_dari_firebase_console
+   FIREBASE_API_KEY_IOS=dapatkan_dari_firebase_console
+   ```
+   *(Catatan: Untuk mendapatkan Firebase API Key, lihat langkah Setup Firebase di bawah).*
 
+### 4. Setup Firebase
+Aplikasi ini membutuhkan Firebase untuk Autentikasi dan Database (Firestore).
 1. Buka [Firebase Console](https://console.firebase.google.com) dan buat project baru.
 2. Aktifkan layanan berikut:
    - **Authentication**: Aktifkan **Email/Password** dan **Google Sign-In**.
    - **Firestore Database**: Buat database.
-   - **Firebase Storage**: Aktifkan storage untuk foto profil.
-3. Daftarkan aplikasi Android/iOS milikmu di setelan project Firebase.
-4. Download konfigurasi Firebase:
+3. Daftarkan aplikasi Android/iOS milikmu di project Firebase.
+4. Download file konfigurasi:
    - **Android**: Download `google-services.json` dan letakkan di `android/app/`
    - **iOS**: Download `GoogleService-Info.plist` dan letakkan di `ios/Runner/`
-5. Generate file opsi Firebase Flutter dengan menjalankan perintah:
+5. Generate file konfigurasi Dart:
    ```bash
    flutterfire configure
    ```
-   Atau buat file `lib/firebase_options.dart` secara manual sesuai project-mu.
-6. Deploy Firestore Security Rules (opsional tapi disarankan):
+   *Penting: Perintah ini akan menulis ulang (overwrite) file `lib/firebase_options.dart`. Setelah dijalankan, **pindahkan/copy** nilai `apiKey` yang ada di dalamnya ke file `.env` kamu, lalu kembalikan file `firebase_options.dart` agar membaca dari `dotenv.env['FIREBASE_API_KEY_...']` seperti versi aslinya di repo ini.*
+6. Deploy Firestore Security Rules:
    ```bash
    firebase deploy --only firestore:rules
    ```
+
+### 5. Jalankan Aplikasi
+```bash
+flutter run
+```
 
 ### Build APK
 ```bash
@@ -212,10 +224,10 @@ lib/
 - Contribution heatmap
 - Route guards & deep linking
 
-### Phase 3 ⏳ — New Features
+### Phase 3 ✅ — New Features
 - Google Sign-In
 - Profile page (update name & photo)
-- Streak counter
+- ImgBB API Integration for Free Uploads
 
 ### Phase 4 ⏳ — Advanced
 - Dark mode
