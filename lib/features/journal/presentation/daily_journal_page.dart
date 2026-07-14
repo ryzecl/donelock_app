@@ -50,7 +50,6 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          height: 400,
           color: Colors.white,
           child: SafeArea(
             child: EmojiPicker(
@@ -60,6 +59,13 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
                 });
                 Navigator.pop(context);
               },
+              config: const Config(
+                height: 400,
+                checkPlatformCompatibility: true,
+                emojiViewConfig: EmojiViewConfig(
+                  emojiSizeMax: 28,
+                ),
+              ),
             ),
           ),
         );
