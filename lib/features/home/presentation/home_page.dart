@@ -34,7 +34,7 @@ class HomePage extends ConsumerWidget {
           side: BorderSide(color: Colors.black, width: 2),
         ),
         icon: const Icon(Icons.smart_toy),
-        label: const Text("AI BRAINSTORM", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace')),
+        label: const Text("DONEAI", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace')),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
