@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../core/utils/calendar_helper.dart';
+import '../../../core/widgets/brutalist_loading.dart';
 import '../providers/calendar_provider.dart';
 import '../../journal/models/journal_model.dart';
 import '../../journal/providers/journal_provider.dart';
@@ -196,7 +196,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 ),
               );
             },
-            loading: () => const Center(child: Padding(padding: EdgeInsets.all(40), child: CircularProgressIndicator())),
+            loading: () => const Center(child: Padding(padding: EdgeInsets.all(40), child: BrutalistLoading())),
             error: (e, st) => Center(child: Text("Error: $e")),
           ),
           const SizedBox(height: 20),
@@ -290,7 +290,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 ),
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: BrutalistLoading()),
             error: (e, st) => Center(child: Text("Error: $e")),
           ),
         ),

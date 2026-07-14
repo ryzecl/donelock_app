@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/storage/preferences_service.dart';
 
 import 'package:go_router/go_router.dart';
+import '../../../core/widgets/brutalist_loading.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -51,10 +52,7 @@ class _SplashPageState extends State<SplashPage> {
               height: 120,
             ),
             const SizedBox(height: 32),
-            const CircularProgressIndicator(
-              strokeWidth: 3,
-              color: Colors.black,
-            ),
+            const BrutalistLoading(size: 40),
           ],
         ),
       ),

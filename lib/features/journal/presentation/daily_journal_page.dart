@@ -5,6 +5,7 @@ import '../models/journal_model.dart';
 import '../providers/journal_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import '../../../core/widgets/brutalist_loading.dart';
 
 class DailyJournalPage extends ConsumerStatefulWidget {
   final DateTime? initialDate;
@@ -150,7 +151,7 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
             ElevatedButton(
               onPressed: loading ? null : save,
               child: loading 
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black)) 
+                ? const SizedBox(width: 20, height: 20, child: BrutalistLoading(size: 16, color: Colors.white)) 
                 : const Text("SAVE JOURNAL"),
             ),
           ],

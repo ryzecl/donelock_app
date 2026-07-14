@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../journal/providers/journal_provider.dart';
+import '../../../core/widgets/brutalist_loading.dart';
 
 class StatisticsPage extends ConsumerWidget {
   const StatisticsPage({super.key});
@@ -153,7 +154,7 @@ class StatisticsPage extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator(color: Colors.black)),
+        loading: () => const Center(child: BrutalistLoading()),
         error: (e, st) => Center(child: Text("Error: $e")),
       ),
     );

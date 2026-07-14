@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/chat_provider.dart';
+import '../../../core/widgets/brutalist_loading.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
@@ -79,8 +80,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
           ),
           if (chatState.isLoading)
             const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(color: Colors.black),
+              padding: EdgeInsets.all(16.0),
+              child: BrutalistLoading(size: 24),
             ),
           Container(
             padding: const EdgeInsets.all(16),

@@ -13,6 +13,7 @@ import 'package:donelock/core/utils/ui_utils.dart';
 import 'package:donelock/core/utils/constants.dart';
 import '../../notification/notification_service.dart';
 import 'package:donelock/core/storage/preferences_service.dart';
+import 'package:donelock/core/widgets/brutalist_loading.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -92,7 +93,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               "photoUrl": url,
             }, SetOptions(merge: true));
             await user.reload();
-            ref.invalidate(authStateProvider);
             if (mounted) UIUtils.showSuccess(context, "Profile picture updated!");
           }
         } else {
@@ -123,7 +123,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         }
         await user.reload();
         
-        ref.invalidate(authStateProvider);
         if (mounted) {
           UIUtils.showSuccess(context, "Profile updated successfully!");
         }
@@ -143,7 +142,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final user = ref.watch(authStateProvider).value;
 
     if (user == null) {
-      return const Center(child: CircularProgressIndicator(color: Colors.black));
+      return const Center(child: BrutalistLoading());
     }
 
     if (!_initialized) {
@@ -184,7 +183,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           child: uploadingImage
                               ? const Padding(
                                   padding: EdgeInsets.all(24.0),
-                                  child: CircularProgressIndicator(color: Colors.black, strokeWidth: 3),
+                                  child: BrutalistLoading(size: 32),
                                 )
                               : Image.network(
                                   avatarUrl,
@@ -264,7 +263,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ElevatedButton(
                     onPressed: loading ? null : updateProfile,
                     child: loading 
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black)) 
+                        ? const SizedBox(width: 20, height: 20, child: BrutalistLoading(size: 16, color: Colors.white)) 
                         : const Text("UPDATE PROFILE"),
                   ),
                 ],

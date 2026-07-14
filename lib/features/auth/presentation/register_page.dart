@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
+import 'package:donelock/core/widgets/brutalist_loading.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -92,7 +93,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                      child: BrutalistLoading(size: 16, color: Colors.white),
                     )
                   : const Text("REGISTER"),
             ),

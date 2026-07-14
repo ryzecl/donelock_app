@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import 'package:donelock/core/utils/ui_utils.dart';
+import 'package:donelock/core/widgets/brutalist_loading.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -149,7 +150,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                      child: BrutalistLoading(size: 16, color: Colors.white),
                     )
                   : const Text("LOGIN"),
             ),
