@@ -61,7 +61,7 @@ class ChatNotifier extends Notifier<ChatState> {
           'Authorization': 'Bearer ${AppConstants.groqApiKey}',
         },
         body: jsonEncode({
-          "model": "llama3-8b-8192",
+          "model": "llama-3.1-8b-instant",
           "messages": newMessages.map((m) => m.toJson()).toList(),
           "temperature": 0.7,
           "max_tokens": 1024,

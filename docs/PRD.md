@@ -155,7 +155,7 @@ Menampilkan & mengupdate:
 ## AI Brainstorming
 
 Chatbot untuk membantu user berpikir dan berefleksi:
-- Menggunakan Groq API (model llama3-8b-8192)
+- Menggunakan Groq API (model llama-3.1-8b-instant)
 - State disimpan sementara menggunakan Riverpod
 - Diakses via tombol Floating Action Button di Home
 - Tema brutalist konsisten dengan aplikasi

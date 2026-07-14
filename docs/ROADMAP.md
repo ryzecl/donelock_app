@@ -52,7 +52,7 @@
 | Delete Account | ✅ | High | Delete from Firestore & Auth |
 | Streak Counter | ✅ | Medium | Hari beruntun productive di Home & Stats |
 | Photo Profile Upload | ✅ | Medium | ImgBB API |
-| AI Brainstorming | ✅ | High | Chatbot pakai Groq API (llama3-8b-8192) |
+| AI Brainstorming | ✅ | High | Chatbot pakai Groq API (llama-3.1-8b-instant) |
 
 ---
 
