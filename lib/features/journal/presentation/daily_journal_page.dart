@@ -148,11 +148,20 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
               ),
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: loading ? null : save,
-              child: loading 
-                ? const SizedBox(width: 20, height: 20, child: BrutalistLoading(size: 16, color: Colors.white)) 
-                : const Text("SAVE JOURNAL"),
+            InkWell(
+              onTap: loading ? null : save,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                decoration: UIUtils.neoBox(color: const Color(0xFFFFD073)), // Neo Yellow
+                alignment: Alignment.center,
+                child: loading 
+                  ? const SizedBox(width: 24, height: 24, child: BrutalistLoading(size: 20, color: Colors.black)) 
+                  : const Text(
+                      "SAVE JOURNAL", 
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.black),
+                    ),
+              ),
             ),
           ],
         ),

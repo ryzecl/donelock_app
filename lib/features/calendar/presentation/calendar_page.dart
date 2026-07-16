@@ -193,11 +193,13 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              reverse: true,
-              child: Padding(
+              reverse: heatmapRange == 'year',
+              child: Container(
+                constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                alignment: Alignment.center,
                 padding: const EdgeInsets.all(20),
                 child: SizedBox(
-                  height: heatmapRange == 'week' ? (7 * 30.0 + 6 * 4.0) : (7 * 14.0 + 6 * 4.0),
+                  height: heatmapRange == 'week' ? (40.0 + 10) : (heatmapRange == 'month' ? (7 * 20.0 + 6 * 4.0 + 10) : (7 * 14.0 + 6 * 4.0 + 10)),
                   child: Wrap(
                     direction: Axis.vertical,
                     spacing: 4,
@@ -218,7 +220,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       if (isProductive == true) boxColor = const Color(0xFF4ADE80);
                       else if (isProductive == false) boxColor = const Color(0xFFFF90E8);
 
-                      double size = heatmapRange == 'week' ? 30 : 14;
+                      double size = heatmapRange == 'week' ? 40 : (heatmapRange == 'month' ? 20 : 14);
 
                       return InkWell(
                         onTap: () => _showJournalModal(context, currentDate),
