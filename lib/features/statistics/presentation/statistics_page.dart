@@ -107,9 +107,9 @@ class StatisticsPage extends ConsumerWidget {
                 // 2x2 GRID
                 Row(
                   children: [
-                    Expanded(child: _statBox("TOTAL", "$total", Colors.white)),
+                    Expanded(child: _statBox("TOTAL", "$total", const Color(0xFF23A094))), // Neo Cyan
                     const SizedBox(width: 16),
-                    Expanded(child: _statBox("STREAK", "$currentStreak 🔥", Colors.orange.shade100)),
+                    Expanded(child: _statBox("STREAK", "$currentStreak 🔥", const Color(0xFFFFD073))), // Neo Yellow
                   ],
                 ),
                 const SizedBox(height: 16),

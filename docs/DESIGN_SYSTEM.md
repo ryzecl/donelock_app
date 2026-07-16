@@ -114,5 +114,6 @@ TextField(
 ---
 
 ## Catatan Tambahan
-- Hindari penggunaan warna abu-abu gelap (dark grey) untuk elemen UI; gunakan hitam pekat untuk garis dan teks.
+- Hindari penggunaan warna abu-abu gelap (dark grey) untuk elemen UI utama; gunakan hitam pekat untuk garis dan teks.
 - Pastikan warna kontras sangat jelas (teks hitam di atas warna pastel/vibrant).
+- **Penggunaan Warna (Colorful)**: Gunakan ragam warna *vibrant accents* untuk membedakan fitur (jangan "lock" ke satu warna primary saja). Misalnya, komponen *Heatmap* menggunakan Neo Green, *Lock-in Timer* menggunakan Neo Cyan, dan *Stats* menggunakan Neo Purple. Hal ini membuat aplikasi terasa hidup dan dinamis.

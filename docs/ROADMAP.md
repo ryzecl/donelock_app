@@ -53,6 +53,8 @@
 | Streak Counter | ✅ | Medium | Hari beruntun productive di Home & Stats |
 | Photo Profile Upload | ✅ | Medium | ImgBB API |
 | AI Brainstorming | ✅ | High | Chatbot pakai Groq API (llama-3.1-8b-instant) |
+| Lock-in Pomodoro | ✅ | High | Timer kerja dengan state Work & Rest |
+| Colorful Neo-Brutalism Redesign | ✅ | High | Update UI agar lebih colorful & rounded corners |
 
 ---
 

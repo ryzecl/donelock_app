@@ -56,12 +56,13 @@ class ChatNotifier extends Notifier<ChatState> {
 
       final now = DateTime.now();
       final oneWeekAgo = now.subtract(const Duration(days: 7));
+      final oneWeekAgoStr = "${oneWeekAgo.year}${oneWeekAgo.month.toString().padLeft(2, '0')}${oneWeekAgo.day.toString().padLeft(2, '0')}";
       
       final querySnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .collection('journals')
-          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(oneWeekAgo))
+          .where('date', isGreaterThanOrEqualTo: oneWeekAgoStr)
           .orderBy('date', descending: true)
           .limit(5)
           .get();
@@ -71,10 +72,13 @@ class ChatNotifier extends Notifier<ChatState> {
       String contextStr = "\n\nBerikut adalah ringkasan aktivitas dan jurnal terbaru dari user untuk memberikanmu konteks (JANGAN PERNAH BAHAS INI DI AWAL PERCAKAPAN KECUALI USER MENYINGGUNGNYA, INI HANYA UNTUK KONTEKS):\n";
       for (var doc in querySnapshot.docs) {
         final data = doc.data();
-        final date = (data['date'] as Timestamp).toDate();
-        final content = data['content'] ?? '';
-        final productive = data['productive'] == true ? 'Produktif' : 'Kurang Produktif';
-        contextStr += "- Tanggal ${date.day}/${date.month}/${date.year} (Status: $productive): $content\n";
+        final dateStr = data['date'] as String;
+        final year = dateStr.substring(0, 4);
+        final month = dateStr.substring(4, 6);
+        final day = dateStr.substring(6, 8);
+        final content = data['content'] ?? data['note'] ?? ''; // Some use note, some use content
+        final productive = data['productive'] == true || data['productive'] == 'productive' ? 'Produktif' : 'Kurang Produktif';
+        contextStr += "- Tanggal $day/$month/$year (Status: $productive): $content\n";
       }
 
       final messages = List<ChatMessage>.from(state.messages);

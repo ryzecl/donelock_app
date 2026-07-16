@@ -6,7 +6,7 @@ import '../../../core/utils/calendar_helper.dart';
 import '../../../core/widgets/brutalist_loading.dart';
 import '../../../core/utils/ui_utils.dart';
 import '../providers/calendar_provider.dart';
-import '../../journal/models/journal_model.dart';
+
 import '../../journal/providers/journal_provider.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
@@ -17,11 +17,17 @@ class CalendarPage extends ConsumerStatefulWidget {
 }
 
 class _CalendarPageState extends ConsumerState<CalendarPage> {
-  String viewMode = 'calendar'; // 'calendar' or 'heatmap'
   String heatmapRange = 'month'; // 'week', 'month', 'year'
-
   DateTime focusedDay = DateTime.now();
   DateTime? selectedDay;
+
+  void _showJournalModal(BuildContext context, DateTime date) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _JournalModalBody(date: date),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,55 +35,15 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
       appBar: AppBar(
         title: const Text("CALENDAR", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _brutalistTab(
-                    text: "CALENDAR",
-                    isSelected: viewMode == 'calendar',
-                    onTap: () => setState(() => viewMode = 'calendar'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _brutalistTab(
-                    text: "HEATMAP",
-                    isSelected: viewMode == 'heatmap',
-                    onTap: () => setState(() => viewMode = 'heatmap'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: viewMode == 'calendar' ? _buildCalendar() : _buildHeatmap(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _brutalistTab({required String text, required bool isSelected, required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: UIUtils.neoBox(
-          color: isSelected ? Colors.black : Colors.white,
-          borderWidth: 2,
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildCalendar(),
+            const Divider(height: 40, thickness: 3, color: Colors.black),
+            _buildHeatmap(),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );
@@ -87,123 +53,108 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final month = "${focusedDay.year}${focusedDay.month.toString().padLeft(2, '0')}";
     final journalsAsync = ref.watch(monthlyJournalProvider(month));
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          journalsAsync.when(
-            data: (journals) {
-              return TableCalendar(
-                firstDay: DateTime.utc(2020, 1, 1),
-                lastDay: DateTime.utc(2030, 12, 31),
-                focusedDay: focusedDay,
-                selectedDayPredicate: (day) => isSameDay(selectedDay, day),
-                onDaySelected: (selected, focused) {
-                  setState(() {
-                    selectedDay = selected;
-                    focusedDay = focused;
-                  });
-                },
-                onPageChanged: (focused) => setState(() => focusedDay = focused),
-                calendarBuilders: CalendarBuilders(
-                  defaultBuilder: (context, date, focused) {
-                    final color = getStatusColor(date, journals);
-                    final isToday = isSameDay(date, DateTime.now());
-                    
-                    if (color == Colors.grey) {
-                      return Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: isToday ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2) : null,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${date.day}",
-                          style: TextStyle(
-                            color: isToday ? Theme.of(context).colorScheme.primary : null,
-                            fontWeight: isToday ? FontWeight.bold : null,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      margin: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: color,
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "${date.day}",
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                    );
-                  },
-                  todayBuilder: (context, date, focused) {
-                    final color = getStatusColor(date, journals);
-                    if (color == Colors.grey) {
-                      return Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${date.day}",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                    return Container(
-                      margin: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: color,
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text("${date.day}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    );
-                  },
-                  selectedBuilder: (context, date, focused) {
-                    final color = getStatusColor(date, journals);
-                    if (color == Colors.grey) {
-                      return Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${date.day}",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                    return Container(
-                      margin: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: color,
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text("${date.day}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    );
-                  },
+    return journalsAsync.when(
+      data: (journals) {
+        return TableCalendar(
+          firstDay: DateTime.utc(2020, 1, 1),
+          lastDay: DateTime.utc(2030, 12, 31),
+          focusedDay: focusedDay,
+          selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+          onDaySelected: (selected, focused) {
+            setState(() {
+              selectedDay = selected;
+              focusedDay = focused;
+            });
+            _showJournalModal(context, selected);
+          },
+          onPageChanged: (focused) => setState(() => focusedDay = focused),
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, date, focused) {
+              final color = getStatusColor(date, journals);
+              final isToday = isSameDay(date, DateTime.now());
+              
+              if (color == Colors.grey) {
+                return Container(
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: isToday ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2) : null,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "${date.day}",
+                    style: TextStyle(
+                      color: isToday ? Theme.of(context).colorScheme.primary : null,
+                      fontWeight: isToday ? FontWeight.bold : null,
+                    ),
+                  ),
+                );
+              }
+              return Container(
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: color,
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "${date.day}",
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                 ),
               );
             },
-            loading: () => const Center(child: Padding(padding: EdgeInsets.all(40), child: BrutalistLoading())),
-            error: (e, st) => Center(child: Text("Error: $e")),
+            todayBuilder: (context, date, focused) {
+              final color = getStatusColor(date, journals);
+              if (color == Colors.grey) {
+                return Container(
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "${date.day}",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
+              return Container(
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: color,
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "${date.day}",
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              );
+            },
+            selectedBuilder: (context, date, focused) {
+              final color = getStatusColor(date, journals);
+              return Container(
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: color == Colors.grey ? Colors.black : color,
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "${date.day}",
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 20),
-          if (selectedDay != null) _JournalDetail(selectedDay: selectedDay, journalsAsync: journalsAsync),
-        ],
-      ),
+        );
+      },
+      loading: () => const Center(child: Padding(padding: EdgeInsets.all(40), child: BrutalistLoading())),
+      error: (e, st) => Center(child: Text("Error: $e")),
     );
   }
 
@@ -226,74 +177,71 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
             ],
           ),
         ),
-        Expanded(
-          child: allJournalsAsync.when(
-            data: (journals) {
-              int daysCount;
-              if (heatmapRange == 'week') {
-                daysCount = 7;
-              } else if (heatmapRange == 'month') {
-                daysCount = 30;
-              } else {
-                daysCount = 365;
-              }
+        allJournalsAsync.when(
+          data: (journals) {
+            int daysCount;
+            if (heatmapRange == 'week') {
+              daysCount = 7;
+            } else if (heatmapRange == 'month') {
+              daysCount = 30;
+            } else {
+              daysCount = 365;
+            }
 
-              final today = DateTime.now();
-              final startDate = today.subtract(Duration(days: daysCount - 1));
+            final today = DateTime.now();
+            final startDate = today.subtract(Duration(days: daysCount - 1));
 
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: heatmapRange == 'week' ? (7 * 30.0 + 6 * 4.0) : (7 * 14.0 + 6 * 4.0),
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          spacing: 4,
-                          runSpacing: 4,
-                          children: List.generate(daysCount, (index) {
-                            final currentDate = startDate.add(Duration(days: index));
-                            final dateStr = "${currentDate.year}${currentDate.month.toString().padLeft(2, '0')}${currentDate.day.toString().padLeft(2, '0')}";
-                            
-                            bool? isProductive;
-                            for (final j in journals) {
-                              if (j["date"] == dateStr) {
-                                isProductive = j["productive"] == true || j["productive"] == "productive";
-                                break;
-                              }
-                            }
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              reverse: true,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  height: heatmapRange == 'week' ? (7 * 30.0 + 6 * 4.0) : (7 * 14.0 + 6 * 4.0),
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    spacing: 4,
+                    runSpacing: 4,
+                    children: List.generate(daysCount, (index) {
+                      final currentDate = startDate.add(Duration(days: index));
+                      final dateStr = "${currentDate.year}${currentDate.month.toString().padLeft(2, '0')}${currentDate.day.toString().padLeft(2, '0')}";
+                      
+                      bool? isProductive;
+                      for (final j in journals) {
+                        if (j["date"] == dateStr) {
+                          isProductive = j["productive"] == true || j["productive"] == "productive";
+                          break;
+                        }
+                      }
 
-                            Color boxColor = const Color(0xFFE5E7EB);
-                            if (isProductive == true) boxColor = const Color(0xFF4ADE80);
-                            else if (isProductive == false) boxColor = const Color(0xFFEF4444);
+                      Color boxColor = const Color(0xFFE5E7EB);
+                      if (isProductive == true) boxColor = const Color(0xFF4ADE80);
+                      else if (isProductive == false) boxColor = const Color(0xFFFF90E8);
 
-                            double size = heatmapRange == 'week' ? 30 : 14;
+                      double size = heatmapRange == 'week' ? 30 : 14;
 
-                            return Tooltip(
-                              message: "${currentDate.day}/${currentDate.month}/${currentDate.year}",
-                              child: Container(
-                                width: size,
-                                height: size,
-                                decoration: UIUtils.neoBox(
-                                  color: boxColor,
-                                  borderWidth: 1,
-                                ),
-                              ),
-                            );
-                          }),
+                      return InkWell(
+                        onTap: () => _showJournalModal(context, currentDate),
+                        child: Tooltip(
+                          message: "${currentDate.day}/${currentDate.month}/${currentDate.year}",
+                          child: Container(
+                            width: size,
+                            height: size,
+                            decoration: UIUtils.neoBox(
+                              color: boxColor,
+                              borderWidth: 1,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      );
+                    }),
                   ),
                 ),
-              );
-            },
-            loading: () => const Center(child: BrutalistLoading()),
-            error: (e, st) => Center(child: Text("Error: $e")),
-          ),
+              ),
+            );
+          },
+          loading: () => const Center(child: Padding(padding: EdgeInsets.all(20), child: BrutalistLoading())),
+          error: (e, st) => Center(child: Text("Error: $e")),
         ),
       ],
     );
@@ -322,85 +270,85 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   }
 }
 
-class _JournalDetail extends ConsumerWidget {
-  final DateTime? selectedDay;
-  final AsyncValue<List<Journal>> journalsAsync;
-
-  const _JournalDetail({required this.selectedDay, required this.journalsAsync});
+class _JournalModalBody extends ConsumerWidget {
+  final DateTime date;
+  
+  const _JournalModalBody({required this.date});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (selectedDay == null) return const SizedBox.shrink();
+    final asyncJournals = ref.watch(allJournalsProvider);
+    final id = "${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}";
 
-    final id = "${selectedDay!.year}${selectedDay!.month.toString().padLeft(2, '0')}${selectedDay!.day.toString().padLeft(2, '0')}";
-
-    return journalsAsync.when(
-      data: (journals) {
-        Journal? journal;
-        for (final item in journals) {
-          if (item.id == id) {
-            journal = item;
-            break;
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+        border: Border(
+          top: BorderSide(color: Colors.black, width: 3),
+          left: BorderSide(color: Colors.black, width: 3),
+          right: BorderSide(color: Colors.black, width: 3),
+        ),
+      ),
+      child: asyncJournals.when(
+        data: (journals) {
+          Map<String, dynamic>? journal;
+          for (final j in journals) {
+            if (j['date'] == id) {
+              journal = j;
+              break;
+            }
           }
-        }
 
-        if (journal == null) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: UIUtils.neoBox(
-                color: Colors.white,
-                borderWidth: 2,
-              ),
-              child: Column(
-                children: [
-                  Text("No journal for ${selectedDay!.day}/${selectedDay!.month}/${selectedDay!.year}"),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.push('/journal_edit', extra: selectedDay!);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text("ADD JOURNAL"),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: UIUtils.neoBox(
-              color: Colors.white,
-              borderWidth: 2,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          if (journal == null) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  "${journal.productivity == 'productive' ? '🟢' : '🔴'} ${journal.productivity == 'productive' ? 'Productive' : 'Not Productive'}",
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text("NO JOURNAL FOR ${date.day}/${date.month}/${date.year}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey), textAlign: TextAlign.center),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.push('/journal_edit', extra: date);
+                  },
+                  child: const Text("📝 ADD JOURNAL"),
                 ),
-                const SizedBox(height: 8),
-                Text("Mood: ${journal.mood}", style: const TextStyle(fontSize: 16)),
-                const SizedBox(height: 8),
-                Text(journal.note, style: const TextStyle(fontSize: 14)),
               ],
-            ),
-          ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (e, st) => const SizedBox.shrink(),
+            );
+          }
+
+          final isProd = journal['productive'] == true || journal['productive'] == 'productive';
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${date.day}/${date.month}/${date.year}",
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "${isProd ? '🟢' : '🔴'} ${isProd ? 'Productive' : 'Not Productive'}",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text("Mood: ${journal['mood']}", style: const TextStyle(fontSize: 16)),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: UIUtils.neoBox(color: Colors.white, borderWidth: 2),
+                child: Text(journal['note'] ?? journal['content'] ?? '', style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+              ),
+              const SizedBox(height: 20),
+            ],
+          );
+        },
+        loading: () => const Center(child: BrutalistLoading()),
+        error: (e, st) => Text("Error: $e"),
+      ),
     );
   }
 }

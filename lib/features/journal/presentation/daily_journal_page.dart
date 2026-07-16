@@ -88,57 +88,57 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              "WAS TODAY PRODUCTIVE?",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              "HOW WAS YOUR DAY?",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: _brutalistChoice(
-                    text: "🟢 YES",
+                    text: "🟢 PRODUCTIVE",
                     isSelected: productive,
+                    selectedColor: const Color(0xFF4ADE80), // Neo Green
                     onTap: () => setState(() => productive = true),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: _brutalistChoice(
-                    text: "🔴 NO",
+                    text: "🔴 UNPRODUCTIVE",
                     isSelected: !productive,
+                    selectedColor: const Color(0xFFFF90E8), // Neo Pink
                     onTap: () => setState(() => productive = false),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 32),
-            const Text("MOOD", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text("HOW DO YOU FEEL?", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
             const SizedBox(height: 16),
-            Row(
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
               children: [
-                _brutalistEmoji(
-                  emoji: mood,
-                  isSelected: true,
-                  onTap: () {},
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      side: const BorderSide(color: Colors.black, width: 3),
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      textStyle: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', letterSpacing: 1),
-                    ),
-                    onPressed: _showEmojiPicker,
-                    child: const Text("CHANGE MOOD"),
+                ...["⚡", "😀", "😐", "😔", "😤"].map((e) => _brutalistEmoji(
+                  emoji: e,
+                  isSelected: mood == e,
+                  onTap: () => setState(() => mood = e),
+                )),
+                InkWell(
+                  onTap: _showEmojiPicker,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: UIUtils.neoBox(color: Colors.white),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.add, size: 28),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 32),
-            const Text("NOTES", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text("JOURNAL ENTRY", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
@@ -160,19 +160,19 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
     );
   }
 
-  Widget _brutalistChoice({required String text, required bool isSelected, required VoidCallback onTap}) {
+  Widget _brutalistChoice({required String text, required bool isSelected, Color selectedColor = Colors.black, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: UIUtils.neoBox(
-          color: isSelected ? Colors.black : Colors.white,
+          color: isSelected ? selectedColor : Colors.white,
         ),
         alignment: Alignment.center,
         child: Text(
           text,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
+            color: isSelected ? Colors.black : Colors.black, // Always black text for neo brutalism if bg is bright
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
