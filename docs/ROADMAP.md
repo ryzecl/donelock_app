@@ -34,7 +34,7 @@
 | Bottom Navigation Bar | ✅ | High | 5 tabs: Home, Journal, Calendar, Stats, Profile |
 | Route Guards (Auth + Onboarding) | ✅ | High | Centralized redirect logic |
 | Logout Stack Clearing | ✅ | High | `context.go('/auth/login')` setelah signOut |
-| Calendar UI Customization | ✅ | Medium | Heatmap view per week/month/year |
+| Calendar UI Customization | ✅ | Medium | Heatmap view per week/month/year (Unified + Modal) |
 | Notification Tap Deep Link | ⏳ | Medium | Tap notifikasi → buka halaman journal |
 | Widget Refactor | ✅ | Medium | Semua UI pakai theme token |
 | PopScope Back Button Guards | ⏳ | Medium | Blokir back ke splash/onboarding |
@@ -51,10 +51,11 @@
 | Forgot Password | ✅ | High | Send reset link via Firebase |
 | Delete Account | ✅ | High | Delete from Firestore & Auth |
 | Streak Counter | ✅ | Medium | Hari beruntun productive di Home & Stats |
-| Photo Profile Upload | ✅ | Medium | ImgBB API |
-| AI Brainstorming | ✅ | High | Chatbot pakai Groq API (llama-3.1-8b-instant) |
+| Photo Profile Upload | ✅ | Medium | ImgBB API (with auto compression) |
+| AI Brainstorming | ✅ | High | Chatbot pakai Groq API dengan konteks jurnal |
 | Lock-in Pomodoro | ✅ | High | Timer kerja dengan state Work & Rest |
 | Colorful Neo-Brutalism Redesign | ✅ | High | Update UI agar lebih colorful & rounded corners |
+| Daily Journal UI Redesign | ✅ | High | Neo-brutalism mood toolbar, productive toggle, save button |
 
 ---
 
