@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/chat_provider.dart';
 import '../../../core/widgets/brutalist_loading.dart';
+import '../../../core/utils/ui_utils.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
@@ -62,12 +63,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(16),
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
-                    decoration: BoxDecoration(
-                      color: isUser ? const Color(0xFFBBF7D0) : Colors.white, // Hijau untuk user, Putih untuk AI
-                      border: Border.all(color: Colors.black, width: 3),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black, offset: Offset(4, 4)),
-                      ],
+                    decoration: UIUtils.neoBox(
+                      color: isUser ? const Color(0xFF4ADE80) : Colors.white, // Neo green for user, white for AI
                     ),
                     child: Text(
                       msg.content,

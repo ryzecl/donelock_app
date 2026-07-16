@@ -23,8 +23,8 @@ Color getStatusColor(DateTime date, List<Journal> journals) {
   }
 
   if (journal.productivity == "productive") {
-    return Colors.green;
+    return const Color(0xFF4ADE80); // Neo green
   }
 
-  return Colors.red;
+  return const Color(0xFFFF90E8); // Neo pink
 }

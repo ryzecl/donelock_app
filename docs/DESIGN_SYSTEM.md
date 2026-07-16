@@ -1,43 +1,28 @@
-# Design System — DoneLock Brutalist Theme
+# Design System — DoneLock Neo-Brutalist Theme
 
 ## Filosofi
-Brutalist design: bold, raw, functional. Tidak ada elemen dekoratif yang tidak perlu. Setiap elemen harus punya tujuan.
+Neo-Brutalism: perpaduan antara keberanian brutalism (bold, raw) dengan elemen modern yang *playful*. Ciri khasnya adalah penggunaan warna yang sangat cerah (vibrant), border hitam yang tebal, bayangan hitam padat (solid drop shadow) yang memiliki *offset*, dan sudut yang sedikit melengkung (rounded).
 
 ---
 
 ## Color Palette
 
-### Primary
+### Primary & Monocrome
 | Token | Color | Hex | Usage |
 |-------|-------|-----|-------|
-| `primary` | Hitam pekat | `#0D0D0D` | Text, border, header |
-| `primaryLight` | Abu gelap | `#2B2B2B` | Card background, button |
-| `accent` | Kuning DoneLock | `#FFCA16` | Tombol aksi, highlight, header |
+| `primary` | Hitam pekat | `#000000` | Text, border, shadow, header |
+| `bg` | Off-white/Krem | `#F4F4F0` | Scaffold background utama |
+| `surface` | Putih bersih | `#FFFFFF` | Background dari Cards/Containers |
 
-### Background
+### Vibrant Accents (Neo Colors)
 | Token | Color | Hex | Usage |
 |-------|-------|-----|-------|
-| `bg` | Putih krem | `#F5F5F0` | Scaffold background |
-| `surface` | Putih bersih | `#FFFFFF` | Card, container |
-| `surfaceDark` | Hitam soft | `#1A1A1A` | Dark mode surface |
-
-### Semantic
-| Token | Color | Hex | Usage |
-|-------|-------|-----|-------|
-| `productive` | Hijau | `#22C55E` | Productive day, success |
-| `notProductive` | Merah | `#EF4444` | Not productive, error |
-| `neutral` | Abu-abu | `#9CA3AF` | No data, disabled |
-| `warning` | Kuning | `#F59E0B` | Warning |
-
-### Heatmap Scale
-| Level | Color | Hex | Meaning |
-|-------|-------|-----|---------|
-| 0 | Abu muda | `#E5E7EB` | No journal |
-| 1 | Hijau muda | `#BBF7D0` | Productive |
-| 2 | Hijau sedang | `#4ADE80` | Productive streak |
-| 3 | Hijau tua | `#16A34A` | Productive streak panjang |
-
-> **Catatan**: Warna masih bisa didiskusikan. Palette di atas adalah saran awal.
+| `neoYellow` | Kuning Terang | `#FFD073` | Highlight, badge, primary action |
+| `neoPink` | Pink Permen | `#FF90E8` | Aksen sekunder, error / missed |
+| `neoCyan` | Biru Muda/Teal| `#23A094` | Info, stat cards, chill mode |
+| `neoPurple` | Ungu Cerah | `#90A8ED` | Elemen unik, variasi kartu |
+| `neoGreen` | Hijau Terang | `#4ADE80` | Success, productive, go |
+| `neoRed` | Merah Terang | `#EF4444` | Danger, stop |
 
 ---
 
@@ -50,140 +35,84 @@ Brutalist design: bold, raw, functional. Tidak ada elemen dekoratif yang tidak p
 | Heading 2 | Monospace | 20px | SemiBold | 0 |
 | Body | Monospace | 14px | Regular | 0.5 |
 | Caption | Monospace | 12px | Medium | 1 |
-| Button | Monospace | 16px | Bold | 2 |
+| Button | Monospace | 16px | Bold | 1 |
 
-### Font Family
-```dart
-// Gunakan Google Fonts atau system monospace
-fontFamily: 'JetBrains Mono' // atau 'Courier New', 'SF Mono'
-```
+> **Catatan**: Tetap menggunakan `monospace` agar karakter raw dari aplikasi sebelumnya tetap terjaga, namun dipadukan dengan style yang lebih modern.
 
 ---
 
-## Spacing System
+## Shape & Shadow (Neo-Brutalism Core)
 
-| Token | Size | Usage |
-|-------|------|-------|
-| `xs` | 4px | Icons, padding kecil |
-| `sm` | 8px | Gap antar elemen |
-| `md` | 16px | Padding card |
-| `lg` | 24px | Padding section |
-| `xl` | 32px | Margin antar section |
-| `xxl` | 48px | Spasi halaman |
-
----
-
-## Border & Shape
+Di Neo-Brutalism, komponen UI memiliki kedalaman fisik yang palsu (faux-3D) melalui penggunaan shadow solid.
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `borderWidth` | 2px | Semua border |
-| `cardBorder` | 3px | Card, container |
-| `buttonBorder` | 3px | Tombol |
-| `borderRadius` | 0 (squared) | Brutalist: kotak tajam |
-| `buttonRadius` | 0 | Tombol kotak |
+| `borderWidth` | 3px - 4px | Semua border (Cards, Buttons, Inputs) |
+| `borderRadius`| 12px | Sudut kotak melengkung (playful) |
+| `shadowOffset`| x: 4, y: 4 | Bayangan jatuh ke kanan bawah |
+| `shadowColor` | `#000000` | Warna bayangan murni hitam, tanpa blur |
 
-> **Catatan**: Brutalist identity bisa menggunakan border 2-4px tebal dengan sudut siku-siku (radius = 0).
+### Helper Component (UIUtils.neoBox)
+Gunakan fungsi helper ini untuk membuat Container berdesain Neo-Brutalism:
+```dart
+static BoxDecoration neoBox({
+  Color color = Colors.white,
+  double borderRadius = 12,
+  double borderWidth = 3,
+}) {
+  return BoxDecoration(
+    color: color,
+    borderRadius: BorderRadius.circular(borderRadius),
+    border: Border.all(color: Colors.black, width: borderWidth),
+    boxShadow: const [
+      BoxShadow(
+        color: Colors.black,
+        offset: Offset(4, 4),
+        blurRadius: 0,
+      ),
+    ],
+  );
+}
+```
 
 ---
 
 ## Component Styles
 
 ### Button
+Neo-brutalism button menggunakan `ElevatedButton` yang di-*styling* agar mirip dengan *neoBox*.
 ```dart
 ElevatedButton(
   style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.white, // atau warna terang lainnya
     foregroundColor: Colors.black,
-    side: const BorderSide(color: Colors.black, width: 3),
-    shape: const RoundedRectangleBorder(),
-    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+    elevation: 0, // Matikan default shadow Flutter
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(color: Colors.black, width: 3),
+    ),
   ),
-  child: const Text("LOGIN", style: TextStyle(fontWeight: FontWeight.bold)),
+  child: const Text("TOMBOL"),
 )
 ```
-
-### Card
-```dart
-Container(
-  decoration: BoxDecoration(
-    color: Colors.white,
-    border: Border.all(color: Colors.black, width: 2),
-  ),
-  padding: const EdgeInsets.all(16),
-)
-```
+*(Catatan: karena ElevatedButton Flutter menggunakan blur pada default elevation-nya, shadow hitam pekat bisa di-apply pada parent Container atau melalui custom widget jika dibutuhkan shadow pada tombol).*
 
 ### Input Field
 ```dart
 TextField(
   decoration: InputDecoration(
+    filled: true,
+    fillColor: Colors.white,
     border: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.black, width: 2),
-      borderRadius: BorderRadius.zero,
+      borderSide: const BorderSide(color: Colors.black, width: 3),
+      borderRadius: BorderRadius.circular(12),
     ),
-    labelStyle: const TextStyle(fontFamily: 'monospace'),
   ),
 )
 ```
-
-### Heatmap Cell
-```dart
-Container(
-  width: 14,
-  height: 14,
-  decoration: BoxDecoration(
-    color: color, // hijau/merah/abu sesuai data
-    border: Border.all(color: Colors.black, width: 0.5),
-  ),
-)
-```
-
-### Bottom Navigation Bar
-
-```dart
-BottomNavigationBar(
-  type: BottomNavigationBarType.fixed,
-  backgroundColor: Colors.white,
-  selectedItemColor: Colors.black,
-  unselectedItemColor: Colors.grey.shade400,
-  selectedLabelStyle: const TextStyle(
-    fontFamily: 'monospace',
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  ),
-  unselectedLabelStyle: const TextStyle(
-    fontFamily: 'monospace',
-    fontSize: 11,
-  ),
-  items: const [
-    BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: "HOME"),
-    BottomNavigationBarItem(icon: Icon(Icons.edit_outlined), activeIcon: Icon(Icons.edit), label: "JOURNAL"),
-    BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), activeIcon: Icon(Icons.calendar_month), label: "CALENDAR"),
-    BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), activeIcon: Icon(Icons.bar_chart), label: "STATS"),
-    BottomNavigationBarItem(icon: Icon(Icons.person_outlined), activeIcon: Icon(Icons.person), label: "PROFILE"),
-  ],
-)
-```
-
-Style:
-- Warna putih, border hitam 2px di atas
-- Text monospace, uppercase
-- Icon filled untuk active, outlined untuk inactive
-- Fixed type (tidak bergerak saat ada 5 item)
 
 ---
 
-## Dark Mode (Optional)
-
-Belum diimplementasikan. Jika ditambahkan:
-- Gunakan `surfaceDark` sebagai background
-- Gunakan teks putih pada background gelap
-- Ikon dan border tetap terlihat jelas
-
----
-
-## Catatan
-- Design system ini masih bisa berkembang
-- Utamakan konsistensi dibandingkan kreativitas
-- Setiap komponen baru harus mengikuti pattern yang sudah ada
+## Catatan Tambahan
+- Hindari penggunaan warna abu-abu gelap (dark grey) untuk elemen UI; gunakan hitam pekat untuk garis dan teks.
+- Pastikan warna kontras sangat jelas (teks hitam di atas warna pastel/vibrant).

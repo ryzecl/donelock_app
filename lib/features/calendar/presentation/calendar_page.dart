@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/utils/calendar_helper.dart';
 import '../../../core/widgets/brutalist_loading.dart';
+import '../../../core/utils/ui_utils.dart';
 import '../providers/calendar_provider.dart';
 import '../../journal/models/journal_model.dart';
 import '../../journal/providers/journal_provider.dart';
@@ -66,9 +67,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
+        decoration: UIUtils.neoBox(
           color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(color: Colors.black, width: 2),
+          borderWidth: 2,
         ),
         alignment: Alignment.center,
         child: Text(
@@ -112,7 +113,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       return Container(
                         margin: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8),
                           border: isToday ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2) : null,
                         ),
                         alignment: Alignment.center,
@@ -128,9 +129,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     return Container(
                       margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8),
                         color: color,
-                        border: Border.all(color: Colors.black, width: 1),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       alignment: Alignment.center,
                       child: Text(
@@ -145,7 +146,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       return Container(
                         margin: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
                         ),
                         alignment: Alignment.center,
@@ -158,9 +159,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     return Container(
                       margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8),
                         color: color,
-                        border: Border.all(color: Colors.black, width: 1),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       alignment: Alignment.center,
                       child: Text("${date.day}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -172,7 +173,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       return Container(
                         margin: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
                         ),
                         alignment: Alignment.center,
@@ -185,9 +186,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     return Container(
                       margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8),
                         color: color,
-                        border: Border.all(color: Colors.black, width: 1),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       alignment: Alignment.center,
                       child: Text("${date.day}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -276,9 +277,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                               child: Container(
                                 width: size,
                                 height: size,
-                                decoration: BoxDecoration(
+                                decoration: UIUtils.neoBox(
                                   color: boxColor,
-                                  border: Border.all(color: Colors.black, width: 1),
+                                  borderWidth: 1,
                                 ),
                               ),
                             );
@@ -304,9 +305,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
       onTap: () => setState(() => heatmapRange = mode),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
+        decoration: UIUtils.neoBox(
           color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(color: Colors.black, width: 2),
+          borderWidth: 2,
         ),
         child: Text(
           text,
@@ -349,9 +350,9 @@ class _JournalDetail extends ConsumerWidget {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
+              decoration: UIUtils.neoBox(
                 color: Colors.white,
-                border: Border.all(color: Colors.black, width: 2),
+                borderWidth: 2,
               ),
               child: Column(
                 children: [
@@ -378,9 +379,9 @@ class _JournalDetail extends ConsumerWidget {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: UIUtils.neoBox(
               color: Colors.white,
-              border: Border.all(color: Colors.black, width: 2),
+              borderWidth: 2,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

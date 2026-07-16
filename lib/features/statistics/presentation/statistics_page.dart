@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../journal/providers/journal_provider.dart';
 import '../../../core/widgets/brutalist_loading.dart';
+import '../../../core/utils/ui_utils.dart';
 
 class StatisticsPage extends ConsumerWidget {
   const StatisticsPage({super.key});
@@ -71,14 +72,9 @@ class StatisticsPage extends ConsumerWidget {
               children: [
                 // HERO SCORE CARD
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 4),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black, offset: Offset(6, 6)),
-                    ]
-                  ),
+                  decoration: UIUtils.neoBox(color: const Color(0xFF23A094)),
                   child: Column(
                     children: [
                       const Text("PRODUCTIVITY SCORE", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 2)),
@@ -92,6 +88,7 @@ class StatisticsPage extends ConsumerWidget {
                         height: 24,
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black, width: 2),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: LinearProgressIndicator(
                           value: percentage / 100,
@@ -118,9 +115,9 @@ class StatisticsPage extends ConsumerWidget {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: _statBox("PROD.", "$productiveDays", const Color(0xFFBBF7D0))),
+                    Expanded(child: _statBox("PROD.", "$productiveDays", const Color(0xFF4ADE80))), // Neo green
                     const SizedBox(width: 16),
-                    Expanded(child: _statBox("UNPROD.", "$unproductiveDays", const Color(0xFFFECACA))),
+                    Expanded(child: _statBox("UNPROD.", "$unproductiveDays", const Color(0xFFFF90E8))), // Neo pink
                   ],
                 ),
 
@@ -135,10 +132,7 @@ class StatisticsPage extends ConsumerWidget {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 2),
-                          ),
+                          decoration: UIUtils.neoBox(color: Colors.white),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -163,10 +157,7 @@ class StatisticsPage extends ConsumerWidget {
   Widget _statBox(String title, String value, Color bgColor) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(color: Colors.black, width: 3),
-      ),
+      decoration: UIUtils.neoBox(color: Colors.white),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

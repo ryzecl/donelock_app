@@ -102,7 +102,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               onPressed: loading ? null : loginWithGoogle,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.black, width: 2),
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: const Text("CONTINUE WITH GOOGLE", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'monospace')),

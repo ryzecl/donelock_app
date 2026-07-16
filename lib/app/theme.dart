@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 
-class BrutalistTheme {
+class NeoBrutalistTheme {
   static ThemeData get light {
-    const primaryColor = Color(0xFF0D0D0D);
-    const bgColor = Color(0xFFF5F5F0);
+    const primaryColor = Color(0xFF000000);
+    const bgColor = Color(0xFFF4F4F0);
     const surfaceColor = Color(0xFFFFFFFF);
-    const accentColor = Color(0xFFFFCA16); // Kuning Custom DoneLock
-
+    const accentColor = Color(0xFFFFD073); // Neo Yellow
 
     return ThemeData(
       fontFamily: 'monospace',
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: primaryColor,
         secondary: accentColor,
         surface: bgColor, // Scaffold background
         onSurface: primaryColor,
-        error: const Color(0xFFEF4444),
+        error: Color(0xFFEF4444),
       ),
       scaffoldBackgroundColor: bgColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: accentColor,
+        backgroundColor: surfaceColor,
         foregroundColor: primaryColor,
         elevation: 0,
         shape: Border(
@@ -31,14 +30,14 @@ class BrutalistTheme {
           backgroundColor: accentColor,
           foregroundColor: primaryColor,
           side: const BorderSide(color: primaryColor, width: 3),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'monospace',
-            letterSpacing: 2,
+            letterSpacing: 1,
             fontSize: 16,
           ),
           elevation: 0,
@@ -47,8 +46,8 @@ class BrutalistTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: primaryColor,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -57,39 +56,39 @@ class BrutalistTheme {
           ),
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surfaceColor,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor, width: 2),
-          borderRadius: BorderRadius.zero,
+          borderSide: const BorderSide(color: primaryColor, width: 3),
+          borderRadius: BorderRadius.circular(12),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor, width: 2),
-          borderRadius: BorderRadius.zero,
+          borderSide: const BorderSide(color: primaryColor, width: 3),
+          borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor, width: 3),
-          borderRadius: BorderRadius.zero,
+          borderSide: const BorderSide(color: primaryColor, width: 4),
+          borderRadius: BorderRadius.circular(12),
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontFamily: 'monospace',
           color: primaryColor,
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
-      cardTheme: const CardThemeData(
+      cardTheme: CardThemeData(
         color: surfaceColor,
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(color: primaryColor, width: 2),
-          borderRadius: BorderRadius.zero,
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: primaryColor, width: 3),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
       dividerTheme: const DividerThemeData(
         color: primaryColor,
-        thickness: 2,
+        thickness: 3,
         space: 0,
       ),
     );

@@ -17,6 +17,7 @@ import '../features/calendar/presentation/calendar_page.dart';
 import '../features/statistics/presentation/statistics_page.dart';
 import '../features/profile/presentation/profile_page.dart';
 import '../features/chat/presentation/chat_page.dart';
+import '../features/pomodoro/presentation/pomodoro_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -72,6 +73,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/chat',
         builder: (context, state) => const ChatPage(),
+      ),
+      GoRoute(
+        path: '/pomodoro',
+        builder: (context, state) => const PomodoroPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/utils/constants.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class ChatMessage {
   final String role;
   final String content;
@@ -34,6 +37,7 @@ class ChatState {
 class ChatNotifier extends Notifier<ChatState> {
   @override
   ChatState build() {
+    _loadContext();
     return ChatState(messages: [
       ChatMessage(
           role: "system",
@@ -43,6 +47,45 @@ class ChatNotifier extends Notifier<ChatState> {
           role: "assistant",
           content: "Halo! Aku DONEAI. Gimana harimu hari ini? Ada yang mau diceritain atau butuh bantuan buat tetap produktif?"),
     ]);
+  }
+
+  Future<void> _loadContext() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final now = DateTime.now();
+      final oneWeekAgo = now.subtract(const Duration(days: 7));
+      
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('journals')
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(oneWeekAgo))
+          .orderBy('date', descending: true)
+          .limit(5)
+          .get();
+          
+      if (querySnapshot.docs.isEmpty) return;
+
+      String contextStr = "\n\nBerikut adalah ringkasan aktivitas dan jurnal terbaru dari user untuk memberikanmu konteks (JANGAN PERNAH BAHAS INI DI AWAL PERCAKAPAN KECUALI USER MENYINGGUNGNYA, INI HANYA UNTUK KONTEKS):\n";
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data();
+        final date = (data['date'] as Timestamp).toDate();
+        final content = data['content'] ?? '';
+        final productive = data['productive'] == true ? 'Produktif' : 'Kurang Produktif';
+        contextStr += "- Tanggal ${date.day}/${date.month}/${date.year} (Status: $productive): $content\n";
+      }
+
+      final messages = List<ChatMessage>.from(state.messages);
+      if (messages.isNotEmpty && messages.first.role == 'system') {
+        final newSystemMsg = ChatMessage(role: 'system', content: messages.first.content + contextStr);
+        messages[0] = newSystemMsg;
+        state = state.copyWith(messages: messages);
+      }
+    } catch (e) {
+      // ignore
+    }
   }
 
   Future<void> sendMessage(String text) async {

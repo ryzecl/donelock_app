@@ -65,9 +65,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: Colors.black, width: 3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Colors.black, width: 3),
         ),
         title: const Text("FORGOT PASSWORD", style: TextStyle(fontWeight: FontWeight.bold)),
         content: Column(
@@ -159,7 +159,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               onPressed: loading ? null : loginWithGoogle,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.black, width: 2),
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: const Text("CONTINUE WITH GOOGLE", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'monospace')),

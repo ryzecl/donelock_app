@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UIUtils {
+  static BoxDecoration neoBox({
+    Color color = Colors.white,
+    double borderRadius = 12,
+    double borderWidth = 3,
+    Color borderColor = Colors.black,
+  }) {
+    return BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(borderRadius),
+      border: Border.all(color: borderColor, width: borderWidth),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black,
+          offset: Offset(4, 4),
+          blurRadius: 0,
+        ),
+      ],
+    );
+  }
   /// Parses the error and returns a human-readable message
   static String _getErrorMessage(Object error) {
     if (error is FirebaseAuthException) {
@@ -56,7 +75,7 @@ class UIUtils {
         backgroundColor: Colors.red.shade900,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.circular(12),
           side: const BorderSide(color: Colors.black, width: 3),
         ),
         margin: const EdgeInsets.all(16),
@@ -89,7 +108,7 @@ class UIUtils {
         backgroundColor: Colors.black,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.circular(12),
           side: const BorderSide(color: Colors.white, width: 2),
         ),
         margin: const EdgeInsets.all(16),

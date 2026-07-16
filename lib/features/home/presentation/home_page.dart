@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../journal/providers/journal_provider.dart';
 import '../../../core/widgets/brutalist_loading.dart';
+import '../../../core/utils/ui_utils.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -28,11 +29,11 @@ class HomePage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/chat'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: Colors.black, width: 2),
+        backgroundColor: const Color(0xFFFF90E8), // Neo Pink for AI
+        foregroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Colors.black, width: 3),
         ),
         icon: const Icon(Icons.smart_toy),
         label: const Text("DONEAI", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace')),
@@ -50,6 +51,17 @@ class HomePage extends ConsumerWidget {
             const Text(
               "How was your day today?",
               style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF23A094), // Neo Cyan for Pomodoro
+              ),
+              onPressed: () => context.push('/pomodoro'),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text("⏱️ LOCK-IN (POMODORO)"),
+              ),
             ),
             const SizedBox(height: 32),
             
@@ -108,13 +120,13 @@ class HomePage extends ConsumerWidget {
                     // Mini Stats Row
                     Row(
                       children: [
-                        Expanded(child: _buildMiniStatCard("🔥 STREAK", "$currentStreak DAYS", Colors.orange.shade100)),
+                        Expanded(child: _buildMiniStatCard("🔥 STREAK", "$currentStreak DAYS", const Color(0xFFFFD073))), // Neo Yellow
                         const SizedBox(width: 16),
-                        Expanded(child: _buildMiniStatCard("📊 SCORE", "${productivityScore.toStringAsFixed(0)}%", Colors.blue.shade100)),
+                        Expanded(child: _buildMiniStatCard("📊 SCORE", "${productivityScore.toStringAsFixed(0)}%", const Color(0xFF90A8ED))), // Neo Purple
                       ],
                     ),
                     const SizedBox(height: 16),
-                    _buildMiniStatCard("📅 WEEKLY", "$weeklyProductive / 7 DAYS PRODUCTIVE", Colors.white),
+                    _buildMiniStatCard("📅 WEEKLY", "$weeklyProductive / 7 DAYS PRODUCTIVE", const Color(0xFF4ADE80)), // Neo Green
                     
                     const SizedBox(height: 32),
                     const Text("CONTRIBUTION", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -143,10 +155,7 @@ class HomePage extends ConsumerWidget {
     if (journal == null) {
       return Container(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.black, width: 3),
-        ),
+        decoration: UIUtils.neoBox(color: Colors.white),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -156,10 +165,8 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: const Color(0xFFFFD073), // Neo yellow
+                foregroundColor: Colors.black,
               ),
               onPressed: () {
                 context.go('/journal');
@@ -177,9 +184,8 @@ class HomePage extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: isProductive ? const Color(0xFFBBF7D0) : const Color(0xFFFECACA),
-        border: Border.all(color: Colors.black, width: 3),
+      decoration: UIUtils.neoBox(
+        color: isProductive ? const Color(0xFF4ADE80) : const Color(0xFFFF90E8), // Neo green or pink
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,10 +227,7 @@ class HomePage extends ConsumerWidget {
   Widget _buildMiniStatCard(String title, String value, Color bgColor) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(color: Colors.black, width: 2),
-      ),
+      decoration: UIUtils.neoBox(color: bgColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -240,10 +243,7 @@ class HomePage extends ConsumerWidget {
     if (journal == null) {
       return Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.black, width: 2),
-        ),
+        decoration: UIUtils.neoBox(color: Colors.white),
         child: const Text("Belum ada reflection.", style: TextStyle(color: Colors.grey)),
       );
     }
@@ -255,13 +255,7 @@ class HomePage extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black, width: 3),
-        boxShadow: const [
-          BoxShadow(color: Colors.black, offset: Offset(4, 4)),
-        ],
-      ),
+      decoration: UIUtils.neoBox(color: const Color(0xFFFFD073)), // Neo Yellow
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -285,10 +279,7 @@ class HomePage extends ConsumerWidget {
   Widget _heatmapWidget(List<Map<String, dynamic>> journals) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black, width: 2),
-      ),
+      decoration: UIUtils.neoBox(color: Colors.white),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

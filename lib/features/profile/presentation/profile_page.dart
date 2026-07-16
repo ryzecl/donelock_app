@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -63,15 +62,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   Future<String?> _uploadToImgBB(XFile imageFile) async {
     final uri = Uri.parse('https://api.imgbb.com/1/upload');
-    final request = http.MultipartRequest('POST', uri);
-    request.fields['key'] = AppConstants.imgbbApiKey;
     final bytes = await imageFile.readAsBytes();
-    request.files.add(http.MultipartFile.fromBytes('image', bytes, filename: imageFile.name));
+    final base64Image = base64Encode(bytes);
     
-    final response = await request.send();
-    final responseData = await response.stream.bytesToString();
-    final json = jsonDecode(responseData);
+    final response = await http.post(uri, body: {
+      'key': AppConstants.imgbbApiKey,
+      'image': base64Image,
+    });
     
+    final json = jsonDecode(response.body);
     if (json['success'] == true) {
       return json['data']['url'];
     }
@@ -176,9 +175,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         Container(
                           width: 80,
                           height: 80,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 3),
+                          decoration: UIUtils.neoBox(
                             color: Colors.grey.shade200,
+                            borderWidth: 3,
                           ),
                           child: uploadingImage
                               ? const Padding(
@@ -200,6 +199,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.primary,
                                 border: Border.all(color: Colors.black, width: 2),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Icon(Icons.edit, size: 14, color: Colors.white),
                             ),
@@ -407,9 +407,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget _buildCard({String? title, required Widget child, Color borderColor = Colors.black, Color titleColor = Colors.black}) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: UIUtils.neoBox(
         color: Colors.white,
-        border: Border.all(color: borderColor, width: 3),
+        borderColor: borderColor,
       ),
       padding: const EdgeInsets.all(16),
       child: Column(

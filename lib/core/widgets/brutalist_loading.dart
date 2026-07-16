@@ -35,7 +35,6 @@ class _BrutalistLoadingState extends State<BrutalistLoading> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final isBlack = widget.color == Colors.black;
     return Center(
       child: AnimatedBuilder(
         animation: _controller,
@@ -51,17 +50,28 @@ class _BrutalistLoadingState extends State<BrutalistLoading> with SingleTickerPr
           width: widget.size,
           height: widget.size,
           decoration: BoxDecoration(
-            color: widget.color,
+            color: widget.color == Colors.black ? const Color(0xFFFFD073) : widget.color,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isBlack ? Colors.transparent : Colors.black, 
+              color: Colors.black, 
               width: 3,
             ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black,
+                offset: Offset(3, 3),
+                blurRadius: 0,
+              ),
+            ],
           ),
           child: Center(
             child: Container(
               width: widget.size * 0.3,
               height: widget.size * 0.3,
-              color: isBlack ? Colors.white : Colors.black,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
           ),
         ),

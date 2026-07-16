@@ -14,7 +14,7 @@ class DoneLockApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'DoneLock',
       debugShowCheckedModeBanner: false,
-      theme: BrutalistTheme.light,
+      theme: NeoBrutalistTheme.light,
       routerConfig: router,
     );
   }

@@ -165,9 +165,8 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
+        decoration: UIUtils.neoBox(
           color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(color: Colors.black, width: 3),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -188,9 +187,8 @@ class _DailyJournalPageState extends ConsumerState<DailyJournalPage> {
       child: Container(
         width: 50,
         height: 50,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(color: Colors.black, width: 3),
+        decoration: UIUtils.neoBox(
+          color: isSelected ? const Color(0xFFFFD073) : Colors.white, // Neo yellow for selected
         ),
         alignment: Alignment.center,
         child: Text(
